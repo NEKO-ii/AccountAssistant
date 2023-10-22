@@ -106,18 +106,35 @@ std::vector<std::string> File::readLines(bool skipCommentLine, const std::string
     return lines;
 }
 
-void File::write(const std::string& content)
+void File::write(const std::string& content, bool seekToBegin)
 {
     if (!_check("write")) return;
+    if (seekToBegin) _seekToBegin();
+    _fs.clear();
     _fs.write(content.c_str(), content.size());
+    _fs.flush();
 }
 
-void File::writeLine(const std::string& line, bool appendLineBreak)
+void File::writeLine(const std::string& line, bool appendLineBreak, bool seekToBegin)
 {
     if (!_check("write")) return;
+    if (seekToBegin) _seekToBegin();
+    _fs.clear();
+    _fs << line;
+    if (appendLineBreak) _fs << std::endl;
+    else _fs.flush();
 }
 
-void File::writeLines(const std::vector<std::string>& lines, bool appendLineBreaks)
+void File::writeLines(const std::vector<std::string>& lines, bool appendLineBreaks, bool seekToBegin)
 {
     if (!_check("write")) return;
+    if (seekToBegin) _seekToBegin();
+    _fs.clear();
+    for (std::vector<std::string>::const_iterator line = lines.begin(); line != lines.end(); line++)
+    {
+        _fs << *line;
+        if (appendLineBreaks && line != lines.end()) _fs << std::endl;
+        _fs.flush();
+    }
+    _fs.flush();
 }

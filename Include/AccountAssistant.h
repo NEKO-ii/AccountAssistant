@@ -15,15 +15,37 @@ public:
 private:
     const int SYSTEM_MESSAGE_TIMEOUT = 3000;
 
+    bool _isSettingSaved = true;
+    bool _isSettingChanged = false;
+
     Ui::AccountAssistantClass _ui;
     QSystemTrayIcon* _systemTrayIcon;
     QMenu* _menu;
 
-    void closeEvent(QCloseEvent* event);
+    /**
+     * 重写MainWindow关闭事件,根据设置可选隐藏或关闭
+     *
+     * \param event
+     */
+    void closeEvent(QCloseEvent* event) override;
 
     /**
      * 创建系统托盘图标
      *
      */
-    void createSystemTrayIcon(void);
+    void _createSystemTrayIcon(void);
+    /**
+     * 连接信号槽
+     *
+     */
+    void _connectSlots(void);
+    /**
+     * 应用设置
+     *
+     */
+    void _applySettings(void);
+
+private slots:
+    void slot_settingPageControl(void);
+    void slot_currentPageChanged(int currentIndex);
 };

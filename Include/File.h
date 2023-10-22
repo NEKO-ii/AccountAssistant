@@ -66,21 +66,21 @@ public:
      *
      * \param content 待写入字符串内容
      */
-    void write(const std::string& content);
+    void write(const std::string& content, bool seekToBegin = false);
     /**
      * 向文件写入一行
      *
      * \param line 待写入内容
      * \param appendLineBreak 自动在行末尾添加换行符
      */
-    void writeLine(const std::string& line, bool appendLineBreak = false);
+    void writeLine(const std::string& line, bool appendLineBreak = false, bool seekToBegin = false);
     /**
      * 向文件写入多行
      *
      * \param line 待写入内容组
      * \param appendLineBreaks 自动在每行末尾添加换行符
      */
-    void writeLines(const std::vector<std::string>& lines, bool appendLineBreaks = false);
+    void writeLines(const std::vector<std::string>& lines, bool appendLineBreaks = false, bool seekToBegin = false);
 
 private:
     static constexpr std::size_t _BUFF_SIZE = 10;

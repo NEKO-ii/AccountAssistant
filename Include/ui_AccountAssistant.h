@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -44,6 +45,8 @@ public:
     QFormLayout *formLayout;
     QLabel *lb_windowCLoseAction;
     QComboBox *combo_windowCloseAction;
+    QLabel *lb_hideOnStart;
+    QCheckBox *check_hideOnStart;
     QHBoxLayout *layout_settingPageButtonBox;
     QSpacerItem *hs_1;
     QPushButton *btn_settingReject;
@@ -93,6 +96,7 @@ public:
         formLayout->setSpacing(6);
         formLayout->setContentsMargins(11, 11, 11, 11);
         formLayout->setObjectName(QString::fromUtf8("formLayout"));
+        formLayout->setLabelAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         formLayout->setContentsMargins(0, 0, 0, 0);
         lb_windowCLoseAction = new QLabel(scrollAreaWidgetContents);
         lb_windowCLoseAction->setObjectName(QString::fromUtf8("lb_windowCLoseAction"));
@@ -105,6 +109,16 @@ public:
         combo_windowCloseAction->setObjectName(QString::fromUtf8("combo_windowCloseAction"));
 
         formLayout->setWidget(0, QFormLayout::FieldRole, combo_windowCloseAction);
+
+        lb_hideOnStart = new QLabel(scrollAreaWidgetContents);
+        lb_hideOnStart->setObjectName(QString::fromUtf8("lb_hideOnStart"));
+
+        formLayout->setWidget(1, QFormLayout::LabelRole, lb_hideOnStart);
+
+        check_hideOnStart = new QCheckBox(scrollAreaWidgetContents);
+        check_hideOnStart->setObjectName(QString::fromUtf8("check_hideOnStart"));
+
+        formLayout->setWidget(1, QFormLayout::FieldRole, check_hideOnStart);
 
         scroll_settingOptionsContainer->setWidget(scrollAreaWidgetContents);
 
@@ -172,6 +186,8 @@ public:
         combo_windowCloseAction->setItemText(0, QCoreApplication::translate("AccountAssistantClass", "\346\234\200\345\260\217\345\214\226", nullptr));
         combo_windowCloseAction->setItemText(1, QCoreApplication::translate("AccountAssistantClass", "\351\200\200\345\207\272\347\250\213\345\272\217", nullptr));
 
+        lb_hideOnStart->setText(QCoreApplication::translate("AccountAssistantClass", "\345\220\257\345\212\250\346\227\266\351\232\220\350\227\217\344\270\273\347\252\227\345\217\243", nullptr));
+        check_hideOnStart->setText(QString());
         btn_settingReject->setText(QCoreApplication::translate("AccountAssistantClass", "\345\217\226\346\266\210", nullptr));
         btn_settingConfirm->setText(QCoreApplication::translate("AccountAssistantClass", "\347\241\256\350\256\244", nullptr));
         btn_settingApply->setText(QCoreApplication::translate("AccountAssistantClass", "\345\272\224\347\224\250", nullptr));

@@ -1,5 +1,4 @@
 #pragma once
-#include <map>
 
 namespace Core
 {
@@ -20,6 +19,7 @@ public:
     struct Settings
     {
         int windowCloseAction;
+        bool hideOnStart;
     };
 
     static Settings settings;
