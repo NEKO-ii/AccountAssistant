@@ -2,10 +2,12 @@
 
 #include <vector>
 #include <string>
+#include <QWidget>
 
 namespace Core
 {
     class Tools;
+    class Debug;
 }
 
 class Tools
@@ -30,4 +32,10 @@ public:
      * \return 分割后的每部分保存在向量中返回
      */
     static std::vector<std::string> split(const std::string& str, const std::string& delimiter = " ", int maxSplit = 0);
+};
+
+class Debug
+{
+public:
+    static void printStyleSheet(QWidget* widget);
 };

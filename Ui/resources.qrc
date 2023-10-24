@@ -1,0 +1,20 @@
+<RCC>
+  <qresource prefix="/icon">
+    <file>help.svg</file>
+    <file>close.svg</file>
+    <file>save.svg</file>
+    <file>add.svg</file>
+    <file>copy.svg</file>
+    <file>delete.svg</file>
+    <file>done.svg</file>
+    <file>download.svg</file>
+    <file>lock.svg</file>
+    <file>power.svg</file>
+    <file>search.svg</file>
+    <file>settings.svg</file>
+    <file>sync.svg</file>
+    <file>upload.svg</file>
+    <file>visibility.svg</file>
+    <file>visibility_off.svg</file>
+  </qresource>
+</RCC>

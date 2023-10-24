@@ -19,10 +19,16 @@ public:
     struct Settings
     {
         int windowCloseAction;
-        bool hideOnStart;
+        bool hideMainWindowWhenStart;
+        bool showSystemMessageWhenStart;
+        std::string clipboardWriteContent;
+        std::string clipboardWriteMode;
     };
 
     static Settings settings;
+
+    static bool listenPasteShortcuts;
+    static std::string contentWaitToWriteClipboard;
 
     static void updateSettingsFromFIle(void);
     static void writeSettingsToFile(void);

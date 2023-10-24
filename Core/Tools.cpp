@@ -1,4 +1,5 @@
-#include "Tools.h"
+﻿#include "Tools.h"
+#include <iostream>
 
 std::vector<std::string> Tools::split(const std::string& str, const char& delimiter, int maxSplit)
 {
@@ -51,4 +52,9 @@ std::vector<std::string> Tools::split(const std::string& str, const std::string&
     }
 
     return tokens;
+}
+
+void Debug::printStyleSheet(QWidget* widget)
+{
+    std::cout << widget->styleSheet().toStdString() << std::endl;
 }

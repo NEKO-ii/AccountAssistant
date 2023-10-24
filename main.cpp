@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 
     QApplication app(argc, argv);
     AccountAssistant window;
-    if (!State::settings.hideOnStart) window.show();
+    if (!State::settings.hideMainWindowWhenStart) window.show();
 
     return app.exec();
 }

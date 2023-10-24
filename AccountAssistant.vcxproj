@@ -107,7 +107,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\AccountItem.cpp" />
     <ClCompile Include="Core\File.cpp" />
+    <ClCompile Include="Core\KeyHook.cpp" />
     <ClCompile Include="Core\Path.cpp" />
     <ClCompile Include="Core\State.cpp" />
     <QtUic Include="Ui\AccountAssistant.ui" />
@@ -118,7 +120,9 @@
     <None Include="AccountAssistant.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\AccountItem.h" />
     <ClInclude Include="Include\File.h" />
+    <ClInclude Include="Include\KeyHook.h" />
     <ClInclude Include="Include\Path.h" />
     <ClInclude Include="Include\State.h" />
     <ClInclude Include="Include\Tools.h" />
@@ -130,6 +134,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AccountAssistant.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Ui\resources.qrc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

@@ -52,6 +52,12 @@
     <ClCompile Include="Core\Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\AccountItem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\KeyHook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\ui_AccountAssistant.h">
@@ -72,6 +78,12 @@
     <ClInclude Include="Include\Tools.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\AccountItem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\KeyHook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DependencyFiles\settings.ini" />
@@ -80,5 +92,10 @@
     <ResourceCompile Include="AccountAssistant.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Ui\resources.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
 </Project>
