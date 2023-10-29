@@ -32,6 +32,15 @@ public:
      * \return 分割后的每部分保存在向量中返回
      */
     static std::vector<std::string> split(const std::string& str, const std::string& delimiter = " ", int maxSplit = 0);
+
+    /**
+     * 判断字符串是否存在于向量组中
+     *
+     * \param str 查询字符串
+     * \param vec 目标向量组
+     * \return 查询结果
+     */
+    static bool isStringInVector(const std::string& str, const std::vector<std::string>& vec);
 };
 
 class Debug

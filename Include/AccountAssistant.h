@@ -21,7 +21,7 @@ private:
     const int _SYSTEM_MESSAGE_TIMEOUT = 3000;
     const int _TABLE_DEFAULT_ROW_HEIGHT = 10;
     const int _KEY_COMBINATION_DECISION_DELAY = 600;
-    const int _CLIPBOARD_FLUSH_DELAY = 10;
+    const int _CLIPBOARD_FLUSH_DELAY = 50;
 
     bool _isSettingSaved = true;
     bool _isSettingChanged = false;

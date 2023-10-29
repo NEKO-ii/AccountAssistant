@@ -1,13 +1,18 @@
 #pragma once
 
+#include <string>
+#include <map>
+
+#define SETTING_FILE_NAME "settings.ini"
+#define AES_KEY_FILE_NAME "aesk.txt"
+#define DATA_FILE_NAME "data.txt"
+//#define DATA_FILE_NAME "archive.tdat"
+
 namespace Core
 {
     class State;
 }
 
-/**
- * 系统状态类,用于保存表示当前运行状态的全局属性以及软件设置
- */
 class State
 {
 public:
@@ -25,13 +30,43 @@ public:
         std::string clipboardWriteMode;
     };
 
+    struct AESArgs
+    {
+        int keyLength;
+        int iterationCount;
+        std::string salt;
+        std::string iv;
+    };
+
+    // 存储软件全局设置
     static Settings settings;
+    // 存储AES加解密参数
+    static AESArgs aesArgs;
+    // 存储加密数据
+    static std::map<int, std::string> data;
 
     static bool listenPasteShortcuts;
     static std::string contentWaitToWriteClipboard;
+    static unsigned int currentDataCount;
 
-    static void updateSettingsFromFIle(void);
+    /**
+     * 从设置文件读取设置并更新全局设置参数
+     */
+    static void updateSettingsFromFile(void);
+
+    /**
+     * \brief 将全局设置参数写入到设置文件内
+     */
     static void writeSettingsToFile(void);
+    /**
+     * 将全局设置参数重置为默认
+     */
+    static void resetToDefaultSettings(void);
+
+    static void updateAESArgsFromFile(void);
+
+    static void updateDataFromFile(void);
+    static void writeDataToFile(void);
 
 private:
     State();

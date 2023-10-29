@@ -40,7 +40,8 @@ public:
     QAction *action_option_quit;
     QAction *action_file_import;
     QAction *action_file_export;
-    QAction *action_safe_setting;
+    QAction *action_security_setting;
+    QAction *action_option_accountGroupSetting;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout;
     QStackedWidget *pages;
@@ -49,7 +50,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *lb_searchAccount;
     QComboBox *combo_searchRule;
-    QComboBox *combo_accountType;
+    QComboBox *combo_accountGroup;
     QLineEdit *ledit_searchInput;
     QPushButton *btn_doSearch;
     QHBoxLayout *horizontalLayout_2;
@@ -114,11 +115,16 @@ public:
         QIcon icon3;
         icon3.addFile(QString::fromUtf8(":/icon/download.svg"), QSize(), QIcon::Normal, QIcon::Off);
         action_file_export->setIcon(icon3);
-        action_safe_setting = new QAction(AccountAssistantClass);
-        action_safe_setting->setObjectName(QString::fromUtf8("action_safe_setting"));
+        action_security_setting = new QAction(AccountAssistantClass);
+        action_security_setting->setObjectName(QString::fromUtf8("action_security_setting"));
         QIcon icon4;
         icon4.addFile(QString::fromUtf8(":/icon/lock.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        action_safe_setting->setIcon(icon4);
+        action_security_setting->setIcon(icon4);
+        action_option_accountGroupSetting = new QAction(AccountAssistantClass);
+        action_option_accountGroupSetting->setObjectName(QString::fromUtf8("action_option_accountGroupSetting"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/icon/label.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        action_option_accountGroupSetting->setIcon(icon5);
         centralWidget = new QWidget(AccountAssistantClass);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         verticalLayout = new QVBoxLayout(centralWidget);
@@ -151,15 +157,15 @@ public:
 
         horizontalLayout->addWidget(combo_searchRule);
 
-        combo_accountType = new QComboBox(page_main);
-        combo_accountType->setObjectName(QString::fromUtf8("combo_accountType"));
+        combo_accountGroup = new QComboBox(page_main);
+        combo_accountGroup->setObjectName(QString::fromUtf8("combo_accountGroup"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(combo_accountType->sizePolicy().hasHeightForWidth());
-        combo_accountType->setSizePolicy(sizePolicy);
+        sizePolicy.setHeightForWidth(combo_accountGroup->sizePolicy().hasHeightForWidth());
+        combo_accountGroup->setSizePolicy(sizePolicy);
 
-        horizontalLayout->addWidget(combo_accountType);
+        horizontalLayout->addWidget(combo_accountGroup);
 
         ledit_searchInput = new QLineEdit(page_main);
         ledit_searchInput->setObjectName(QString::fromUtf8("ledit_searchInput"));
@@ -168,9 +174,9 @@ public:
 
         btn_doSearch = new QPushButton(page_main);
         btn_doSearch->setObjectName(QString::fromUtf8("btn_doSearch"));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/icon/search.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn_doSearch->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/icon/search.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_doSearch->setIcon(icon6);
 
         horizontalLayout->addWidget(btn_doSearch);
 
@@ -206,17 +212,17 @@ public:
 
         btn_remoteSync = new QPushButton(page_main);
         btn_remoteSync->setObjectName(QString::fromUtf8("btn_remoteSync"));
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/icon/sync.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn_remoteSync->setIcon(icon6);
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/icon/sync.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_remoteSync->setIcon(icon7);
 
         horizontalLayout_2->addWidget(btn_remoteSync);
 
         btn_newArchive = new QPushButton(page_main);
         btn_newArchive->setObjectName(QString::fromUtf8("btn_newArchive"));
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/icon/add.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn_newArchive->setIcon(icon7);
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/icon/add.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_newArchive->setIcon(icon8);
 
         horizontalLayout_2->addWidget(btn_newArchive);
 
@@ -338,9 +344,10 @@ public:
 
         tbtn_clipboardWriteHelp = new QToolButton(scrollAreaWidgetContents);
         tbtn_clipboardWriteHelp->setObjectName(QString::fromUtf8("tbtn_clipboardWriteHelp"));
-        QIcon icon8;
-        icon8.addFile(QString::fromUtf8(":/icon/help.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        tbtn_clipboardWriteHelp->setIcon(icon8);
+        tbtn_clipboardWriteHelp->setToolTipDuration(60000);
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/icon/help.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        tbtn_clipboardWriteHelp->setIcon(icon9);
 
         layout_settingPageOptions_2->addWidget(tbtn_clipboardWriteHelp);
 
@@ -368,25 +375,25 @@ public:
 
         btn_settingReject = new QPushButton(page_setting);
         btn_settingReject->setObjectName(QString::fromUtf8("btn_settingReject"));
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/icon/close.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn_settingReject->setIcon(icon9);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/icon/close.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_settingReject->setIcon(icon10);
 
         layout_settingPageButtonBox->addWidget(btn_settingReject);
 
         btn_settingConfirm = new QPushButton(page_setting);
         btn_settingConfirm->setObjectName(QString::fromUtf8("btn_settingConfirm"));
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8(":/icon/save.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn_settingConfirm->setIcon(icon10);
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/icon/save.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_settingConfirm->setIcon(icon11);
 
         layout_settingPageButtonBox->addWidget(btn_settingConfirm);
 
         btn_settingApply = new QPushButton(page_setting);
         btn_settingApply->setObjectName(QString::fromUtf8("btn_settingApply"));
-        QIcon icon11;
-        icon11.addFile(QString::fromUtf8(":/icon/done.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn_settingApply->setIcon(icon11);
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8(":/icon/done.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        btn_settingApply->setIcon(icon12);
 
         layout_settingPageButtonBox->addWidget(btn_settingApply);
 
@@ -413,15 +420,16 @@ public:
         menuBar->addAction(menu_file->menuAction());
         menuBar->addAction(menu_safe->menuAction());
         menu_option->addAction(action_option_setting);
+        menu_option->addAction(action_option_accountGroupSetting);
         menu_option->addSeparator();
         menu_option->addAction(action_option_quit);
         menu_file->addAction(action_file_import);
         menu_file->addAction(action_file_export);
-        menu_safe->addAction(action_safe_setting);
+        menu_safe->addAction(action_security_setting);
 
         retranslateUi(AccountAssistantClass);
 
-        pages->setCurrentIndex(1);
+        pages->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(AccountAssistantClass);
@@ -437,12 +445,13 @@ public:
         action_option_quit->setText(QCoreApplication::translate("AccountAssistantClass", "\351\200\200\345\207\272", nullptr));
         action_file_import->setText(QCoreApplication::translate("AccountAssistantClass", "\345\257\274\345\205\245\346\225\260\346\215\256", nullptr));
         action_file_export->setText(QCoreApplication::translate("AccountAssistantClass", "\345\257\274\345\207\272\346\225\260\346\215\256", nullptr));
-        action_safe_setting->setText(QCoreApplication::translate("AccountAssistantClass", "\345\256\211\345\205\250\350\256\276\347\275\256", nullptr));
+        action_security_setting->setText(QCoreApplication::translate("AccountAssistantClass", "\345\256\211\345\205\250\350\256\276\347\275\256", nullptr));
+        action_option_accountGroupSetting->setText(QCoreApplication::translate("AccountAssistantClass", "\345\210\206\347\273\204\347\256\241\347\220\206", nullptr));
         lb_searchAccount->setText(QCoreApplication::translate("AccountAssistantClass", "\350\264\246\346\210\267\346\243\200\347\264\242", nullptr));
         combo_searchRule->setItemText(0, QCoreApplication::translate("AccountAssistantClass", "\346\243\200\347\264\242\345\271\266\350\276\223\345\207\272\345\205\250\351\203\250", nullptr));
         combo_searchRule->setItemText(1, QCoreApplication::translate("AccountAssistantClass", "\344\276\235\346\215\256\350\207\252\345\256\232\344\271\211\345\220\215\347\247\260", nullptr));
         combo_searchRule->setItemText(2, QCoreApplication::translate("AccountAssistantClass", "\344\276\235\346\215\256\347\224\250\346\210\267\345\220\215", nullptr));
-        combo_searchRule->setItemText(3, QCoreApplication::translate("AccountAssistantClass", "\344\276\235\346\215\256\350\264\246\346\210\267\347\261\273\345\236\213", nullptr));
+        combo_searchRule->setItemText(3, QCoreApplication::translate("AccountAssistantClass", "\344\276\235\346\215\256\350\264\246\346\210\267\345\210\206\347\273\204", nullptr));
 
         btn_doSearch->setText(QCoreApplication::translate("AccountAssistantClass", "\346\243\200\347\264\242", nullptr));
         lb_resultCount_tip->setText(QCoreApplication::translate("AccountAssistantClass", "\347\273\223\346\236\234\346\225\260\351\207\217:", nullptr));
@@ -462,7 +471,7 @@ public:
         QTableWidgetItem *___qtablewidgetitem4 = table_resultShow->horizontalHeaderItem(4);
         ___qtablewidgetitem4->setText(QCoreApplication::translate("AccountAssistantClass", "-", nullptr));
         QTableWidgetItem *___qtablewidgetitem5 = table_resultShow->horizontalHeaderItem(5);
-        ___qtablewidgetitem5->setText(QCoreApplication::translate("AccountAssistantClass", "\347\261\273\345\236\213", nullptr));
+        ___qtablewidgetitem5->setText(QCoreApplication::translate("AccountAssistantClass", "\345\210\206\347\273\204", nullptr));
         QTableWidgetItem *___qtablewidgetitem6 = table_resultShow->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QCoreApplication::translate("AccountAssistantClass", "-", nullptr));
         QTableWidgetItem *___qtablewidgetitem7 = table_resultShow->horizontalHeaderItem(7);
@@ -482,6 +491,10 @@ public:
         combo_clipboardWriteMode->setItemText(0, QCoreApplication::translate("AccountAssistantClass", "\345\220\210\345\271\266\345\220\216\345\206\231\345\205\245", nullptr));
         combo_clipboardWriteMode->setItemText(1, QCoreApplication::translate("AccountAssistantClass", "\347\233\221\345\220\254\346\250\241\345\274\217\345\206\231\345\205\245", nullptr));
 
+#if QT_CONFIG(tooltip)
+        tbtn_clipboardWriteHelp->setToolTip(QCoreApplication::translate("AccountAssistantClass", "<html><head/><body><p>\345\275\223\345\206\231\345\205\245\345\206\205\345\256\271\344\270\272\345\205\250\351\203\250\346\227\266\346\217\220\344\276\233\344\270\244\347\247\215\345\206\231\345\205\245\346\250\241\345\274\217:</p><p>\342\221\240 \345\220\210\345\271\266\345\220\216\345\206\231\345\205\245:</p><p>\350\257\245\346\250\241\345\274\217\344\270\213\345\244\215\345\210\266\350\264\246\346\210\267\346\227\266\344\274\232\345\260\206\347\224\250\346\210\267\345\220\215\344\270\216\345\257\206\347\240\201\347\224\250\347\251\272\346\240\274\350\277\236\346\216\245\345\220\216\344\270\200\346\254\241\346\200\247\345\206\231\345\205\245\345\211\252\345\210\207\346\235\277</p><p>\342\221\241 \347\233\221\345\220\254\346\250\241\345\274\217\345\206\231\345\205\245:</p><p>\350\257\245\346\250\241\345\274\217\344\270\213\345\244\215\345\210\266\350\264\246\346\210\267\346\227\266\344\274\232\351\246\226\345\205\210\345\260\206\347\224\250\346\210\267\345\220\215\345\206\231\345\205\245\345\211\252\345\210\207"
+                        "\346\235\277, \345\220\214\346\227\266\347\233\221\345\220\254&quot;Ctrl + V&quot;\345\277\253\346\215\267\351\224\256,</p><p>\345\275\223\346\214\211\344\270\213\346\255\244\345\277\253\346\215\267\351\224\256\345\220\216\350\207\252\345\212\250\345\260\206\345\257\206\347\240\201\345\206\231\345\205\245\345\211\252\345\210\207\346\235\277</p></body></html>", nullptr));
+#endif // QT_CONFIG(tooltip)
         tbtn_clipboardWriteHelp->setText(QCoreApplication::translate("AccountAssistantClass", "...", nullptr));
         btn_settingReject->setText(QCoreApplication::translate("AccountAssistantClass", "\345\217\226\346\266\210", nullptr));
         btn_settingConfirm->setText(QCoreApplication::translate("AccountAssistantClass", "\347\241\256\350\256\244", nullptr));

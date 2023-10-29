@@ -54,6 +54,11 @@ std::vector<std::string> Tools::split(const std::string& str, const std::string&
     return tokens;
 }
 
+bool Tools::isStringInVector(const std::string& str, const std::vector<std::string>& vec)
+{
+    return std::find(vec.begin(), vec.end(), str) != vec.end();
+}
+
 void Debug::printStyleSheet(QWidget* widget)
 {
     std::cout << widget->styleSheet().toStdString() << std::endl;

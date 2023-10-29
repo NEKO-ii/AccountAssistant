@@ -6,7 +6,9 @@
 int main(int argc, char* argv[])
 {
     Path::init();
-    State::updateSettingsFromFIle();
+    State::updateSettingsFromFile();
+    State::updateAESArgsFromFile();
+    State::updateDataFromFile();
 
     QApplication app(argc, argv);
     AccountAssistant window;

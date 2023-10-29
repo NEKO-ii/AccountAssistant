@@ -13,7 +13,7 @@ AccountItem::AccountItem()
     email(""),
     comment("")
 {}
-AccountItem::AccountItem(QString customName, QString username, QString password, QString type, QString note, QString createTime, QString updateTime, QString phoneNumber, QString nickName, QString email, QString comment)
+AccountItem::AccountItem(QString customName, QString type, QString createTime, QString updateTime, QString comment, QString username, QString password, QString nickName, QString phoneNumber, QString email, QString note)
     : customName(customName),
     username(username),
     password(password),
@@ -25,6 +25,5 @@ AccountItem::AccountItem(QString customName, QString username, QString password,
     nickName(nickName),
     email(email),
     comment(comment)
-{
-}
+{}
 AccountItem::~AccountItem() {}

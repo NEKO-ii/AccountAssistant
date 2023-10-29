@@ -10,18 +10,18 @@ class AccountItem
 {
 public:
     QString customName;
-    QString username;
-    QString password;
     QString type;
-    QString note;
     QString createTime;
     QString updateTime;
-    QString phoneNumber;
-    QString nickName;
-    QString email;
     QString comment;
+    QString username;
+    QString password;
+    QString nickName;
+    QString phoneNumber;
+    QString email;
+    QString note;
 
     AccountItem();
-    AccountItem(QString customName = "", QString username = "", QString password = "", QString type = "", QString note = "", QString createTime = "", QString updateTime = "", QString phoneNumber = "", QString nickName = "", QString email = "", QString comment = "");
+    AccountItem(QString customName = "", QString type = "", QString createTime = "", QString updateTime = "", QString comment = "", QString username = "", QString password = "", QString nickName = "", QString phoneNumber = "", QString email = "", QString note = "");
     ~AccountItem();
 };

@@ -58,6 +58,9 @@
     <ClCompile Include="Core\KeyHook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Core\EnDecryption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\ui_AccountAssistant.h">
@@ -84,9 +87,14 @@
     <ClInclude Include="Include\KeyHook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Include\EnDecryption.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="DependencyFiles\settings.ini" />
+    <Text Include="DependencyFiles\aesk.txt" />
+    <Text Include="DependencyFiles\data.txt" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AccountAssistant.rc">
@@ -94,8 +102,13 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="Ui\resources.qrc">
+    <QtRcc Include="Ui\resources\resources.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DependencyFiles\archive.tdat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

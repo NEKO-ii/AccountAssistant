@@ -2,12 +2,14 @@
 #include <QToolButton>
 #include <QClipboard>
 #include <QTimer>
+#include <QToolTip>
 #include <iostream>
 #include <format>
 #include "AccountAssistant.h"
 #include "State.h"
 #include "Path.h"
 #include "Tools.h"
+#include "EnDecryption.h"
 
 AccountAssistant::AccountAssistant(QWidget* parent)
     : QMainWindow(parent)
@@ -22,6 +24,8 @@ AccountAssistant::AccountAssistant(QWidget* parent)
     _initWidgetState();
     _connectSlots();
     _ui.pages->setCurrentWidget(_ui.page_main);
+    /*std::string a = AES::encryptString("TestString", "1234567890123456");
+    std::cout << a << std::endl;*/
 }
 
 AccountAssistant::~AccountAssistant() {}
@@ -115,7 +119,7 @@ void AccountAssistant::_createSystemTrayIcon(void)
 
 void AccountAssistant::_initWidgetState(void)
 {
-    _ui.combo_accountType->hide();
+    _ui.combo_accountGroup->hide();
     _ui.ledit_searchInput->setEnabled(false);
     _ui.table_resultShow->verticalHeader()->setDefaultSectionSize(_TABLE_DEFAULT_ROW_HEIGHT);
     _ui.table_resultShow->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -250,12 +254,12 @@ void AccountAssistant::slot_accountSearchRuleChanged(int currentIndex)
     // 以账户类型为依据检索时显示类型下拉列表,隐藏输入框
     if (currentIndex == 3)
     {
-        _ui.combo_accountType->show();
+        _ui.combo_accountGroup->show();
         _ui.ledit_searchInput->hide();
     }
     else
     {
-        _ui.combo_accountType->hide();
+        _ui.combo_accountGroup->hide();
         _ui.ledit_searchInput->show();
     }
     // 输出所有数据时禁用信息输入框

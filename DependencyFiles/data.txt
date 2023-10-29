@@ -1,0 +1,4 @@
+# Account Archive Data File Format Example
+# Format: <custom_name1:custom_name2:...>::<type1:type2:...>::<create_time>::<update_time>::<encrypted_data>
+
+github:git::web:work::2023-10-29 16:50:00::2023-10-29 16:50:00::AES256XHFLSJHFYUTRSJDFLKLGJKDFJAPMVNBSAHHFUWYAJXCNQORUGGHTNDPCGFMNGKDK...

@@ -79,8 +79,36 @@
     </PostBuildEvent>
     <ClCompile>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Workspace\Code\CPP\AccountAssistant\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Environment\Crypto\include;D:\Workspace\Code\CPP\AccountAssistant\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Environment\Crypto\lib\LIBx64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Environment\Crypto\include;D:\Workspace\Code\CPP\AccountAssistant\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <QtRcc>
+      <QtRccDir>Ui</QtRccDir>
+    </QtRcc>
+    <QtUic>
+      <QtUicDir>Include</QtUicDir>
+    </QtUic>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Environment\Crypto\lib\LIBx64\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>cryptlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PostBuildEvent>
+      <Command>editbin /SUBSYSTEM:CONSOLE $(OutDir)\$(ProjectName).exe</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -108,10 +136,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\AccountItem.cpp" />
+    <ClCompile Include="Core\EnDecryption.cpp" />
     <ClCompile Include="Core\File.cpp" />
     <ClCompile Include="Core\KeyHook.cpp" />
     <ClCompile Include="Core\Path.cpp" />
     <ClCompile Include="Core\State.cpp" />
+    <None Include="DependencyFiles\archive.tdat" />
     <QtUic Include="Ui\AccountAssistant.ui" />
     <QtMoc Include="Include\AccountAssistant.h" />
     <ClCompile Include="AccountAssistant.cpp" />
@@ -121,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\AccountItem.h" />
+    <ClInclude Include="Include\EnDecryption.h" />
     <ClInclude Include="Include\File.h" />
     <ClInclude Include="Include\KeyHook.h" />
     <ClInclude Include="Include\Path.h" />
@@ -130,13 +161,17 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="DependencyFiles\aesk.txt" />
+    <Text Include="DependencyFiles\data.txt" />
     <Text Include="DependencyFiles\settings.ini" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="AccountAssistant.rc" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="Ui\resources.qrc" />
+    <QtRcc Include="Ui\resources\resources.qrc">
+      <QtRccDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Ui</QtRccDir>
+    </QtRcc>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
