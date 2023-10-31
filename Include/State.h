@@ -36,6 +36,7 @@ public:
         int iterationCount;
         std::string salt;
         std::string iv;
+        std::string password;
     };
 
     // 存储软件全局设置

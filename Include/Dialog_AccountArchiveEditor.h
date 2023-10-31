@@ -20,14 +20,15 @@ public:
      * \param data 未解密数据字符串
      * \param mode 对话框创建模式(使用本类枚举)
      */
-    Dialog_AccountArchiveEditor(QWidget* parent, const AccountItem& item);
-    Dialog_AccountArchiveEditor(QWidget* parent);
+    Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id, const AccountItem& item);
+    Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id);
     ~Dialog_AccountArchiveEditor();
 
     inline AccountItem getAccountItem(void) { return _item; };
 
 private:
     Ui::Dialog_AccountArchiveEditor _ui;
+    unsigned int _id;
     AccountItem _item;
     OpenMode _openMode;
     std::vector<int> _typeGroup;
@@ -89,5 +90,5 @@ private:
     void _switchEditMode();
 
 signals:
-    void signal_save(AccountItem item);
+    void signal_save(unsigned int id, AccountItem item);
 };

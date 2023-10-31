@@ -14,7 +14,7 @@ namespace Core
 class AES
 {
 public:
-    enum BlockSize
+    enum KeyLength
     {
         AES_128 = 16,
         AES_192 = 24,

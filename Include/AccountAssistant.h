@@ -82,4 +82,5 @@ private slots:
     void slot_copyAccount(void);
     void slot_setSettingChangedFlag(void);
     void slot_showAccountInfo(void);
+    void slot_saveDataArchive(unsigned int id, AccountItem item);
 };

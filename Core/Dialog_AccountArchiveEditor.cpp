@@ -7,9 +7,10 @@
 #include <QDateTime>
 #include <QMessageBox>
 #include <QTimer>
+#include <QPointer>
 
-Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent)
-    :QDialog(parent)
+Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id)
+    :QDialog(parent), _id(id)
 {
     _openMode = OpenMode::CREATE;
     _item = AccountItem();
@@ -19,8 +20,8 @@ Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent)
     _connect();
 }
 
-Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, const AccountItem& item)
-    :QDialog(parent)
+Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id, const AccountItem& item)
+    :QDialog(parent), _id(id)
 {
     _openMode = OpenMode::UPDATE;
     _item = AccountItem(item);
@@ -113,14 +114,19 @@ void Dialog_AccountArchiveEditor::_connect(void)
             QString currentTime = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
             _ui.lb_updateTime_value->setText(currentTime);
             _ui.lb_updateTime_value->setStyleSheet("color: rgb(0,255,0);");
-            QTimer::singleShot(3000, [this] {_ui.lb_updateTime_value->setStyleSheet("color: rgb(85, 85, 255);"); });
+            // 使用QPointer传递给lambda函数,避免定时器未触发时关闭对话框导致的空指针问题
+            QPointer<Dialog_AccountArchiveEditor> dlg = this;
+            QTimer::singleShot(3000, [dlg]
+                {
+                    if (dlg != nullptr) dlg->_ui.lb_updateTime_value->setStyleSheet("color: rgb(85, 85, 255);");
+                });
         });
     // 关闭按钮
     connect(_ui.btn_reject, &QPushButton::clicked, this, &Dialog_AccountArchiveEditor::reject);
     // 保存按钮
     connect(_ui.btn_save, &QPushButton::clicked, this, [this]
         {
-            emit signal_save(_item);
+            emit signal_save(_id, _item);
             accept();
         });
     // 检查按钮
@@ -230,7 +236,7 @@ void Dialog_AccountArchiveEditor::_initData(void)
     else if (_openMode == OpenMode::UPDATE)
     {
         _ui.ledit_customName->setText(_item.customName);
-        for (auto& item : Tools::split(_item.type.toStdString(), ":")) _insertTypeLabel(Define::AccountType(std::stoi(item)));
+        for (auto& item : Tools::split(_item.type.toStdString(), ";")) _insertTypeLabel(Define::AccountType(std::stoi(item)));
         _updateTypeControlBtn();
         _ui.lb_createTime_value->setText(_item.createTime);
         _ui.lb_updateTime_value->setText(_item.updateTime);
@@ -281,7 +287,7 @@ void Dialog_AccountArchiveEditor::_updateDataItem(void)
 {
     _item.customName = _ui.ledit_customName->text();
     std::string typestr = std::to_string(_typeGroup[0]);
-    for (std::vector<int>::iterator i = ++_typeGroup.begin(); i != _typeGroup.end(); i++) typestr.append(std::format(":{}", *i));
+    for (std::vector<int>::iterator i = ++_typeGroup.begin(); i != _typeGroup.end(); i++) typestr.append(std::format(";{}", *i));
     _item.type = QString(typestr.c_str());
     _item.createTime = _ui.lb_createTime_value->text();
     _item.updateTime = _ui.lb_updateTime_value->text();

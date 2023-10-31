@@ -422,6 +422,42 @@ void AccountAssistant::slot_showAccountInfo(void)
     item.email = QString(vec[6].data());
     item.note = QString(vec[7].data());
 
-    Dialog_AccountArchiveEditor editor = Dialog_AccountArchiveEditor(this, item);
+    // 保存密码
+    State::aesArgs.password = password;
+
+    Dialog_AccountArchiveEditor editor = Dialog_AccountArchiveEditor(this, id, item);
+    connect(&editor, &Dialog_AccountArchiveEditor::signal_save, this, &AccountAssistant::slot_saveDataArchive);
     editor.exec();
+}
+
+void AccountAssistant::slot_saveDataArchive(unsigned int id, AccountItem item)
+{
+    std::string noEncy =
+        (
+            item.customName + "::" +
+            item.type + "::" +
+            item.createTime + "::" +
+            item.updateTime + "::"
+            ).toStdString();
+    std::string ency =
+        (
+            item.comment + ":" +
+            item.username + ":" +
+            item.password + ":" +
+            item.nickname + ":" +
+            item.uid + ":" +
+            item.phone + ":" +
+            item.email + ":" +
+            item.note
+            ).toStdString();
+    std::string write =
+        noEncy +
+        AES::getHashCode(ency) + "::" +
+        AES::encryptString(
+            ency,
+            AES::generateAESKey(State::aesArgs.password, AES::hexStringToByteArray(State::aesArgs.salt), State::aesArgs.keyLength, State::aesArgs.iterationCount),
+            AES::hexStringToByteArray(State::aesArgs.iv)
+        );
+    State::data[id] = write;
+    std::cout << write << std::endl;
 }
