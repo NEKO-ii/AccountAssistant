@@ -16,12 +16,14 @@ public:
     QString comment;
     QString username;
     QString password;
-    QString nickName;
-    QString phoneNumber;
+    QString nickname;
+    QString uid;
+    QString phone;
     QString email;
     QString note;
 
     AccountItem();
-    AccountItem(QString customName = "", QString type = "", QString createTime = "", QString updateTime = "", QString comment = "", QString username = "", QString password = "", QString nickName = "", QString phoneNumber = "", QString email = "", QString note = "");
+    AccountItem(QString customName, QString type, QString createTime, QString updateTime, QString comment, QString username, QString password, QString nickname, QString uid, QString phone, QString email, QString note);
+    AccountItem(const AccountItem& item);
     ~AccountItem();
 };

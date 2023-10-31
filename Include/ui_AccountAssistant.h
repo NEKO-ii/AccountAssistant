@@ -95,6 +95,13 @@ public:
         if (AccountAssistantClass->objectName().isEmpty())
             AccountAssistantClass->setObjectName(QString::fromUtf8("AccountAssistantClass"));
         AccountAssistantClass->resize(800, 500);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(AccountAssistantClass->sizePolicy().hasHeightForWidth());
+        AccountAssistantClass->setSizePolicy(sizePolicy);
+        AccountAssistantClass->setMinimumSize(QSize(800, 500));
+        AccountAssistantClass->setMaximumSize(QSize(800, 500));
         action_option_setting = new QAction(AccountAssistantClass);
         action_option_setting->setObjectName(QString::fromUtf8("action_option_setting"));
         QIcon icon;
@@ -159,11 +166,11 @@ public:
 
         combo_accountGroup = new QComboBox(page_main);
         combo_accountGroup->setObjectName(QString::fromUtf8("combo_accountGroup"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(combo_accountGroup->sizePolicy().hasHeightForWidth());
-        combo_accountGroup->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(combo_accountGroup->sizePolicy().hasHeightForWidth());
+        combo_accountGroup->setSizePolicy(sizePolicy1);
 
         horizontalLayout->addWidget(combo_accountGroup);
 
@@ -230,8 +237,8 @@ public:
         verticalLayout_3->addLayout(horizontalLayout_2);
 
         table_resultShow = new QTableWidget(page_main);
-        if (table_resultShow->columnCount() < 8)
-            table_resultShow->setColumnCount(8);
+        if (table_resultShow->columnCount() < 9)
+            table_resultShow->setColumnCount(9);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         table_resultShow->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -248,6 +255,8 @@ public:
         table_resultShow->setHorizontalHeaderItem(6, __qtablewidgetitem6);
         QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
         table_resultShow->setHorizontalHeaderItem(7, __qtablewidgetitem7);
+        QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
+        table_resultShow->setHorizontalHeaderItem(8, __qtablewidgetitem8);
         table_resultShow->setObjectName(QString::fromUtf8("table_resultShow"));
         table_resultShow->setEditTriggers(QAbstractItemView::NoEditTriggers);
         table_resultShow->setTabKeyNavigation(false);
@@ -271,7 +280,7 @@ public:
         scroll_settingOptionsContainer->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 782, 428));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 444, 60));
         verticalLayout_4 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
@@ -282,11 +291,11 @@ public:
         layout_settingPageOptions_1->setObjectName(QString::fromUtf8("layout_settingPageOptions_1"));
         lb_windowCLoseAction = new QLabel(scrollAreaWidgetContents);
         lb_windowCLoseAction->setObjectName(QString::fromUtf8("lb_windowCLoseAction"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(lb_windowCLoseAction->sizePolicy().hasHeightForWidth());
-        lb_windowCLoseAction->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(lb_windowCLoseAction->sizePolicy().hasHeightForWidth());
+        lb_windowCLoseAction->setSizePolicy(sizePolicy2);
 
         layout_settingPageOptions_1->addWidget(lb_windowCLoseAction);
 
@@ -294,8 +303,8 @@ public:
         combo_windowCloseAction->addItem(QString());
         combo_windowCloseAction->addItem(QString());
         combo_windowCloseAction->setObjectName(QString::fromUtf8("combo_windowCloseAction"));
-        sizePolicy.setHeightForWidth(combo_windowCloseAction->sizePolicy().hasHeightForWidth());
-        combo_windowCloseAction->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(combo_windowCloseAction->sizePolicy().hasHeightForWidth());
+        combo_windowCloseAction->setSizePolicy(sizePolicy1);
 
         layout_settingPageOptions_1->addWidget(combo_windowCloseAction);
 
@@ -476,6 +485,8 @@ public:
         ___qtablewidgetitem6->setText(QCoreApplication::translate("AccountAssistantClass", "-", nullptr));
         QTableWidgetItem *___qtablewidgetitem7 = table_resultShow->horizontalHeaderItem(7);
         ___qtablewidgetitem7->setText(QCoreApplication::translate("AccountAssistantClass", "-", nullptr));
+        QTableWidgetItem *___qtablewidgetitem8 = table_resultShow->horizontalHeaderItem(8);
+        ___qtablewidgetitem8->setText(QCoreApplication::translate("AccountAssistantClass", "id", nullptr));
         lb_windowCLoseAction->setText(QCoreApplication::translate("AccountAssistantClass", "\345\205\263\351\227\255\346\214\211\351\222\256\350\241\214\344\270\272", nullptr));
         combo_windowCloseAction->setItemText(0, QCoreApplication::translate("AccountAssistantClass", "\346\234\200\345\260\217\345\214\226", nullptr));
         combo_windowCloseAction->setItemText(1, QCoreApplication::translate("AccountAssistantClass", "\351\200\200\345\207\272\347\250\213\345\272\217", nullptr));

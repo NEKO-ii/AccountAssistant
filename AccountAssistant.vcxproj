@@ -136,6 +136,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\AccountItem.cpp" />
+    <ClCompile Include="Core\Define.cpp" />
+    <ClCompile Include="Core\Dialog_AccountArchiveEditor.cpp" />
     <ClCompile Include="Core\EnDecryption.cpp" />
     <ClCompile Include="Core\File.cpp" />
     <ClCompile Include="Core\KeyHook.cpp" />
@@ -148,9 +150,12 @@
     <ClCompile Include="Core\Tools.cpp" />
     <ClCompile Include="main.cpp" />
     <None Include="AccountAssistant.ico" />
+    <QtUic Include="Ui\Dialog_AccountArchiveEditor.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\AccountItem.h" />
+    <QtMoc Include="Include\Dialog_AccountArchiveEditor.h" />
+    <ClInclude Include="Include\Define.h" />
     <ClInclude Include="Include\EnDecryption.h" />
     <ClInclude Include="Include\File.h" />
     <ClInclude Include="Include\KeyHook.h" />
@@ -158,6 +163,7 @@
     <ClInclude Include="Include\State.h" />
     <ClInclude Include="Include\Tools.h" />
     <ClInclude Include="Include\ui_AccountAssistant.h" />
+    <ClInclude Include="Include\ui_Dialog_AccountArchiveEditor.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

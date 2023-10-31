@@ -1,5 +1,8 @@
 <RCC>
   <qresource prefix="/icon">
+    <file>edit.svg</file>
+    <file>block.svg</file>
+    <file>remove.svg</file>
     <file>label.svg</file>
     <file>help.svg</file>
     <file>close.svg</file>

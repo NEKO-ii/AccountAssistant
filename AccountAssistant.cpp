@@ -2,7 +2,8 @@
 #include <QToolButton>
 #include <QClipboard>
 #include <QTimer>
-#include <QToolTip>
+#include <QInputDialog>
+#include <QMessageBox>
 #include <iostream>
 #include <format>
 #include "AccountAssistant.h"
@@ -10,6 +11,7 @@
 #include "Path.h"
 #include "Tools.h"
 #include "EnDecryption.h"
+#include "Dialog_AccountArchiveEditor.h"
 
 AccountAssistant::AccountAssistant(QWidget* parent)
     : QMainWindow(parent)
@@ -24,8 +26,6 @@ AccountAssistant::AccountAssistant(QWidget* parent)
     _initWidgetState();
     _connectSlots();
     _ui.pages->setCurrentWidget(_ui.page_main);
-    /*std::string a = AES::encryptString("TestString", "1234567890123456");
-    std::cout << a << std::endl;*/
 }
 
 AccountAssistant::~AccountAssistant() {}
@@ -131,6 +131,7 @@ void AccountAssistant::_initWidgetState(void)
     _ui.table_resultShow->setColumnWidth(5, 70);
     _ui.table_resultShow->setColumnWidth(6, 60);
     _ui.table_resultShow->setColumnWidth(7, 60);
+    _ui.table_resultShow->hideColumn(8);
 }
 
 void AccountAssistant::_connectSlots(void)
@@ -172,19 +173,20 @@ void AccountAssistant::_applySettings(void)
     }
 }
 
-void AccountAssistant::_addLineToResultShowTable(const AccountItem& accountItem)
+void AccountAssistant::_addLineToResultShowTable(unsigned int id, const AccountItem& accountItem)
 {
     int currentRowIndex = _ui.table_resultShow->rowCount();
     QTableWidget* table = _ui.table_resultShow;
     table->insertRow(currentRowIndex);
     table->setItem(currentRowIndex, 0, new QTableWidgetItem(accountItem.customName));
+    table->setItem(currentRowIndex, 8, new QTableWidgetItem(std::to_string(id).c_str()));
     QLineEdit* ledit_username = new QLineEdit(table);
     QLineEdit* ledit_password = new QLineEdit(table);
-    ledit_username->setText(accountItem.username);
+    ledit_username->setText(tr("Username"));
     ledit_username->setReadOnly(true);
     ledit_username->setEchoMode(QLineEdit::Password);
     ledit_username->setStyleSheet("background:transparent; border:none; outline:none;");
-    ledit_password->setText(accountItem.password);
+    ledit_password->setText(tr("Password"));
     ledit_password->setReadOnly(true);
     ledit_password->setEchoMode(QLineEdit::Password);
     ledit_password->setStyleSheet("background:transparent; border:none; outline:none;");
@@ -208,6 +210,7 @@ void AccountAssistant::_addLineToResultShowTable(const AccountItem& accountItem)
     connect(btn_deleteAccount, &QPushButton::clicked, this, &AccountAssistant::slot_deleteAccountArchive);
     connect(tbtn_showAccount, &QToolButton::clicked, this, &AccountAssistant::slot_switchAccountVisability);
     connect(tbtn_copyAccount, &QToolButton::clicked, this, &AccountAssistant::slot_copyAccount);
+    connect(btn_accountInfo, &QPushButton::clicked, this, &AccountAssistant::slot_showAccountInfo);
 }
 
 void AccountAssistant::slot_currentPageChanged(int currentIndex)
@@ -273,7 +276,7 @@ void AccountAssistant::slot_accountSearchRuleChanged(int currentIndex)
 void AccountAssistant::slot_newAccountArchive(void)
 {
     // TODO: 完成新建对话框后实现该函数
-    _addLineToResultShowTable(AccountItem(std::format("Custom Name {}", _ui.table_resultShow->rowCount() + 1).c_str(), "Username", "Password", "Type"));
+    _addLineToResultShowTable(0, AccountItem(std::format("Custom Name {}", _ui.table_resultShow->rowCount() + 1).c_str(), "0:1:2", "", "", "", "", "", "", "", "", "", ""));
 }
 void AccountAssistant::slot_deleteAccountArchive(void)
 {
@@ -355,4 +358,70 @@ void AccountAssistant::slot_setSettingChangedFlag(void)
 {
     _isSettingChanged = true;
     _ui.btn_settingApply->setEnabled(true);
+}
+void AccountAssistant::slot_showAccountInfo(void)
+{
+    //std::string test = "comment:username:password:neko:0016:::This is test note message.\nEndline test.\n\nEmpty line test.";
+    //std::cout << AES::getHashCode(test) << std::endl;
+    //std::cout << AES::encryptString(test, AES::generateAESKey("000", AES::hexStringToByteArray(State::aesArgs.salt), State::aesArgs.keyLength, State::aesArgs.iterationCount), AES::hexStringToByteArray(State::aesArgs.iv)) << std::endl;
+
+    QPushButton* btn = qobject_cast<QPushButton*>(this->sender());
+    if (btn == nullptr) return;
+    QTableWidget* table = _ui.table_resultShow;
+    QRect rect = btn->frameGeometry();
+    QModelIndex index = table->indexAt(QPoint(rect.x(), rect.y()));
+    unsigned int id = std::stoi(table->item(index.row(), 8)->text().toStdString());
+    std::string encystr = State::data[id];
+    std::vector<std::string> vec = Tools::split(encystr, "::");
+    std::string hashCode = vec[4];
+
+    bool ok;
+    std::string password = QInputDialog::getText(nullptr, "输入密码", "输入密码", QLineEdit::Password, "", &ok, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).toStdString();
+    if (!ok || password.empty()) return;
+
+    bool pass = false;
+    std::string decystr;
+    try {
+        decystr = AES::decryptString(
+            vec[5],
+            AES::generateAESKey(
+                password,
+                AES::hexStringToByteArray(State::aesArgs.salt),
+                State::aesArgs.keyLength,
+                State::aesArgs.iterationCount),
+            AES::hexStringToByteArray(State::aesArgs.iv));
+
+        // 结果验证,对比该密码解密结果哈希值与原文哈希值是否吻合
+        std::string hashDecy = AES::getHashCode(decystr);
+        if (hashDecy == hashCode) pass = true;
+        else pass = false;
+    }
+    catch (...) {}
+    // 如果密码错误则结束
+    if (!pass)
+    {
+        QMessageBox(QMessageBox::Icon::Information, "提示", "密码错误", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+        return;
+    }
+
+    // 创建账户对象并写入非加密数据
+    AccountItem item;
+    item.customName = QString(vec[0].c_str());
+    item.type = QString(vec[1].c_str());
+    item.createTime = QString(vec[2].c_str());
+    item.updateTime = QString(vec[3].c_str());
+
+    // 解析解密后的字符串并向账户对象写入数据(依据数据文件格式定义,加密数据中每部分使用:分割且顺序固定)
+    vec = Tools::split(decystr, ":", 0, false);
+    item.comment = QString(vec[0].data());
+    item.username = QString(vec[1].data());
+    item.password = QString(vec[2].data());
+    item.nickname = QString(vec[3].data());
+    item.uid = QString(vec[4].data());
+    item.phone = QString(vec[5].data());
+    item.email = QString(vec[6].data());
+    item.note = QString(vec[7].data());
+
+    Dialog_AccountArchiveEditor editor = Dialog_AccountArchiveEditor(this, item);
+    editor.exec();
 }

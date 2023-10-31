@@ -68,12 +68,9 @@ private:
     /**
      * 向信息展示表添加一行内容
      *
-     * \param customName 用户自定义名称
-     * \param username 用户名
-     * \param password 密码
-     * \param type 类型
+     * \param accountItem 账户存档对象
      */
-    void _addLineToResultShowTable(const AccountItem& accountItem);
+    void _addLineToResultShowTable(unsigned int id, const AccountItem& accountItem);
 
 private slots:
     void slot_settingPageControl(void);
@@ -84,4 +81,5 @@ private slots:
     void slot_switchAccountVisability(void);
     void slot_copyAccount(void);
     void slot_setSettingChangedFlag(void);
+    void slot_showAccountInfo(void);
 };

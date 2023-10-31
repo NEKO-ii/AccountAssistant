@@ -43,7 +43,7 @@ public:
     // 存储AES加解密参数
     static AESArgs aesArgs;
     // 存储加密数据
-    static std::map<int, std::string> data;
+    static std::map<unsigned int, std::string> data;
 
     static bool listenPasteShortcuts;
     static std::string contentWaitToWriteClipboard;

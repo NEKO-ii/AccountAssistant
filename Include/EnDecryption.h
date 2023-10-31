@@ -27,7 +27,7 @@ public:
      * \param blockSize 块大小
      * \return 字节块对象
      */
-    static CryptoPP::SecByteBlock getRandomByteBlock(const int& blockSize);
+    static CryptoPP::SecByteBlock getRandomByteBlock();
 
     /**
      * 生成AES加密秘钥
@@ -56,10 +56,27 @@ public:
      *
      * \param input 原始字符串
      * \param key 加密秘钥
-     * \return 加密后的数据
+     * \param iv IV向量
+     * \return 加密后的数据(已将ByteArray转为HexString)
      */
-    static std::string encryptString(const std::string& input, const CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock iv);
-    static std::string decryptString(const std::string& input, const CryptoPP::SecByteBlock& key, CryptoPP::SecByteBlock iv);
+    static std::string encryptString(const std::string& input, const CryptoPP::SecByteBlock& key, const CryptoPP::SecByteBlock& iv);
+    /**
+     * 解密数据
+     *
+     * \param input 加密数据(HexString)
+     * \param key 加密秘钥
+     * \param iv IV向量
+     * \return 原始字符串
+     */
+    static std::string decryptString(const std::string& input, const CryptoPP::SecByteBlock& key, const CryptoPP::SecByteBlock& iv);
+
+    /**
+     * 获取哈希值
+     *
+     * \param input 带求值字符串
+     * \return 哈希值
+     */
+    static std::string getHashCode(const std::string& input);
 
 private:
     AES(void);

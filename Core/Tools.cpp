@@ -1,7 +1,7 @@
 ﻿#include "Tools.h"
 #include <iostream>
 
-std::vector<std::string> Tools::split(const std::string& str, const char& delimiter, int maxSplit)
+std::vector<std::string> Tools::split(const std::string& str, const char& delimiter, int maxSplit, bool ignoreEmptyStr)
 {
     std::vector<std::string> tokens;
     std::string token;
@@ -15,11 +15,11 @@ std::vector<std::string> Tools::split(const std::string& str, const char& delimi
         token = str.substr(posNow, pos - posNow);
         posNow = pos + 1;
         splitCount++;
-        if (!token.empty()) tokens.push_back(token);
+        if (!token.empty() || !ignoreEmptyStr) tokens.push_back(token);
         if (pos != str.npos && maxSplit > 0 && splitCount >= maxSplit)
         {
             token = str.substr(posNow, str.length());
-            if (!token.empty()) tokens.push_back(token);
+            if (!token.empty() || !ignoreEmptyStr) tokens.push_back(token);
             break;
         }
     }
@@ -27,7 +27,7 @@ std::vector<std::string> Tools::split(const std::string& str, const char& delimi
     return tokens;
 }
 
-std::vector<std::string> Tools::split(const std::string& str, const std::string& delimiter, int maxSplit)
+std::vector<std::string> Tools::split(const std::string& str, const std::string& delimiter, int maxSplit, bool ignoreEmptyStr)
 {
     std::vector<std::string> tokens;
     std::string token;
@@ -42,21 +42,16 @@ std::vector<std::string> Tools::split(const std::string& str, const std::string&
         token = str.substr(posNow, pos - posNow);
         posNow = pos + delimiterLength;
         splitCount++;
-        if (!token.empty()) tokens.push_back(token);
+        if (!token.empty() || !ignoreEmptyStr) tokens.push_back(token);
         if (pos != str.npos && maxSplit > 0 && splitCount >= maxSplit)
         {
             token = str.substr(posNow, str.length());
-            if (!token.empty()) tokens.push_back(token);
+            if (!token.empty() || !ignoreEmptyStr) tokens.push_back(token);
             break;
         }
     }
 
     return tokens;
-}
-
-bool Tools::isStringInVector(const std::string& str, const std::vector<std::string>& vec)
-{
-    return std::find(vec.begin(), vec.end(), str) != vec.end();
 }
 
 void Debug::printStyleSheet(QWidget* widget)

@@ -14,7 +14,7 @@ State::~State() {}
 
 State::Settings State::settings;
 State::AESArgs State::aesArgs;
-std::map<int, std::string> State::data;
+std::map<unsigned int, std::string> State::data;
 
 void State::updateSettingsFromFile(void)
 {
@@ -75,7 +75,7 @@ void State::updateAESArgsFromFile(void)
         if (vec[0] == "KEYLENGTH") aesArgs.keyLength = std::stoi(vec[1]);
         else if (vec[0] == "ITERATIONCOUNT") aesArgs.iterationCount = std::stoi(vec[1]);
         else if (vec[0] == "SALT") aesArgs.salt = vec[1];
-        else if (vec[0] == "IV") aesArgs.salt = vec[1];
+        else if (vec[0] == "IV") aesArgs.iv = vec[1];
     }
 }
 
