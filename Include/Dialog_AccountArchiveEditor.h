@@ -17,8 +17,8 @@ public:
      * 创建对话框
      *
      * \param parent 父对象指针
-     * \param data 未解密数据字符串
-     * \param mode 对话框创建模式(使用本类枚举)
+     * \param id 唯一存档id
+     * \param item 存档对象,使用包含该参数的构造即视为UPDATE模式打开
      */
     Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id, const AccountItem& item);
     Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id);
@@ -37,6 +37,7 @@ private:
     std::string _currentTypeControlBtnAction;
     bool _isEncyInfoHide;
     bool _isOnEditMode;
+    bool _isDefaultTypeLabelRemoved;
 
     /**
      * 链接信号槽
@@ -90,5 +91,5 @@ private:
     void _switchEditMode();
 
 signals:
-    void signal_save(unsigned int id, AccountItem item);
+    void signal_save(unsigned int id, AccountItem item, OpenMode mode);
 };

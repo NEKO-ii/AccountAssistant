@@ -5,6 +5,7 @@
 #include "ui_AccountAssistant.h"
 #include "AccountItem.h"
 #include "KeyHook.h"
+#include "Dialog_AccountArchiveEditor.h"
 
 #define VK_V 0x56
 #define VK_LCONTROL 0xA2 
@@ -56,6 +57,11 @@ private:
      */
     void _initWidgetState(void);
     /**
+     * 初始化表格数据
+     *
+     */
+    void _initData(void);
+    /**
      * 连接信号槽
      *
      */
@@ -71,6 +77,31 @@ private:
      * \param accountItem 账户存档对象
      */
     void _addLineToResultShowTable(unsigned int id, const AccountItem& accountItem);
+    /**
+     * 将加密数据写入文件
+     *
+     */
+    void _writeDataToFile(void);
+    /**
+     * 在表格中从上到下搜索某一列的值,输出第一次出现该值的行号,若未找到,输出值等于总行数
+     *
+     * \param colIndex 目标列索引
+     * \param value 目标值
+     */
+    int _searchValueInTable(const QTableWidget* table, const int& colIndex, std::string value);
+    /**
+     * 弹出输入密码输入框
+     *
+     * \param inputCount 需要重复输入的次数
+     * \return 最终确认的密码
+     */
+    std::string _inputPassword(const int& inputCount, bool& flag, const bool& showMsgWhenReject = false);
+    /**
+     * 自动根据当前状态获取密码
+     *
+     * \return 密码
+     */
+    std::string _getPassword(bool& flag, const bool& showMsgWhenReject = false);
 
 private slots:
     void slot_settingPageControl(void);
@@ -82,5 +113,5 @@ private slots:
     void slot_copyAccount(void);
     void slot_setSettingChangedFlag(void);
     void slot_showAccountInfo(void);
-    void slot_saveDataArchive(unsigned int id, AccountItem item);
+    void slot_saveDataArchive(unsigned int id, AccountItem item, Dialog_AccountArchiveEditor::OpenMode mode);
 };

@@ -14,6 +14,7 @@ Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsign
 {
     _openMode = OpenMode::CREATE;
     _item = AccountItem();
+    _isDefaultTypeLabelRemoved = false;
     _ui.setupUi(this);
     _initWidgetState();
     _initData();
@@ -25,6 +26,7 @@ Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsign
 {
     _openMode = OpenMode::UPDATE;
     _item = AccountItem(item);
+    _isDefaultTypeLabelRemoved = true;
     _ui.setupUi(this);
     _initWidgetState();
     _initData();
@@ -46,6 +48,11 @@ void Dialog_AccountArchiveEditor::_connect(void)
             }
             else if (_currentTypeControlBtnAction == "create")
             {
+                if (_openMode == OpenMode::CREATE && !_isDefaultTypeLabelRemoved)
+                {
+                    _removeTypeLabel(0);
+                    _isDefaultTypeLabelRemoved = true;
+                }
                 _insertTypeLabel(Define::AccountType(_ui.combo_type->currentIndex()));
                 _updateTypeControlBtn();
             }
@@ -126,7 +133,7 @@ void Dialog_AccountArchiveEditor::_connect(void)
     // 保存按钮
     connect(_ui.btn_save, &QPushButton::clicked, this, [this]
         {
-            emit signal_save(_id, _item);
+            emit signal_save(_id, _item, _openMode);
             accept();
         });
     // 检查按钮
@@ -207,6 +214,7 @@ void Dialog_AccountArchiveEditor::_initWidgetState(void)
         _ui.btn_showEncyData->setEnabled(false);
         _ui.tbtn_copyUP->setEnabled(false);
         _ui.btn_edit->hide();
+        _ui.btn_save->hide();
     }
     else
     {

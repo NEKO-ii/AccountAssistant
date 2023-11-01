@@ -24,7 +24,6 @@ public:
     /**
      * 获取随机字节块
      *
-     * \param blockSize 块大小
      * \return 字节块对象
      */
     static CryptoPP::SecByteBlock getRandomByteBlock();

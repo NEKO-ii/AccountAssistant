@@ -10,8 +10,8 @@
 #include "State.h"
 #include "Path.h"
 #include "Tools.h"
+#include "File.h"
 #include "EnDecryption.h"
-#include "Dialog_AccountArchiveEditor.h"
 
 AccountAssistant::AccountAssistant(QWidget* parent)
     : QMainWindow(parent)
@@ -24,6 +24,7 @@ AccountAssistant::AccountAssistant(QWidget* parent)
     _menu = new QMenu(this);
     _createSystemTrayIcon();
     _initWidgetState();
+    _initData();
     _connectSlots();
     _ui.pages->setCurrentWidget(_ui.page_main);
 }
@@ -134,6 +135,18 @@ void AccountAssistant::_initWidgetState(void)
     _ui.table_resultShow->hideColumn(8);
 }
 
+void AccountAssistant::_initData(void)
+{
+    for (auto& pair : State::data)
+    {
+        std::vector<std::string> vec = Tools::split(pair.second, "::", 0, false);
+        AccountItem item;
+        item.customName = QString(vec[0].c_str());
+        item.type = QString(vec[1].c_str());
+        _addLineToResultShowTable(pair.first, item);
+    }
+}
+
 void AccountAssistant::_connectSlots(void)
 {
     // 链接菜单选项
@@ -213,20 +226,89 @@ void AccountAssistant::_addLineToResultShowTable(unsigned int id, const AccountI
     connect(btn_accountInfo, &QPushButton::clicked, this, &AccountAssistant::slot_showAccountInfo);
 }
 
-void AccountAssistant::slot_currentPageChanged(int currentIndex)
+void AccountAssistant::_writeDataToFile(void)
 {
-    // 当前页面为设置页时依据全局设置更新页面组件状态
-    if (currentIndex = _ui.pages->indexOf(_ui.page_setting))
+    std::string dataFilePath = Path::mkpath(Path::DEPENDENCY_FILES, DATA_FILE_NAME);
+    File file = File(dataFilePath, std::ios::out);
+    std::vector<std::string> vec;
+    for (auto& pair : State::data) vec.push_back(pair.second);
+    file.writeLines(vec, true);
+}
+
+int AccountAssistant::_searchValueInTable(const QTableWidget* table, const int& colIndex, std::string value)
+{
+    int row;
+    for (row = 0; row < table->rowCount(); ++row)
     {
-        _ui.combo_windowCloseAction->setCurrentIndex(State::settings.windowCloseAction);
-        _ui.check_hideMainWindowWhenStart->setChecked(State::settings.hideMainWindowWhenStart);
-        _ui.check_showSystemMessageWhenStart->setChecked(State::settings.showSystemMessageWhenStart);
-        _ui.combo_clipboardWriteContent->setCurrentIndex(State::settings.clipboardWriteContent == "username" ? 0 : State::settings.clipboardWriteContent == "password" ? 1 : 2);
-        _ui.combo_clipboardWriteMode->setCurrentIndex(State::settings.clipboardWriteMode == "once" ? 0 : 1);
-        if (_ui.combo_clipboardWriteContent->currentIndex() != 2) _ui.combo_clipboardWriteMode->setEnabled(false);
-        _ui.btn_settingApply->setEnabled(false);
+        QTableWidgetItem* item = table->item(row, colIndex);
+        if (item != nullptr && item->text().toStdString() == value) return row;
+    }
+    return row;
+}
+
+std::string AccountAssistant::_inputPassword(const int& inputCount, bool& flag, const bool& showMsgWhenReject)
+{
+    std::vector<QString> rec;
+    QString password;
+    QString tip = "输入密码";
+    for (int i = 0; i < inputCount; i++)
+    {
+        if (inputCount > 1) tip = QString("输入密码: ") + QString::number(i + 1);
+        password = QInputDialog::getText(nullptr, "输入密码", tip, QLineEdit::Password, "", &flag, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+        if (!flag && showMsgWhenReject)
+        {
+            QMessageBox(QMessageBox::Icon::Information, "提示", "输入操作取消", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            return std::string();
+        }
+        rec.push_back(password);
+    }
+    int size = rec.size();
+    if (size <= 1)
+    {
+        return rec[0].toStdString();
+    }
+    else
+    {
+        bool pass = true;
+        for (int i = 1; i < size; i++)
+        {
+            if (rec[i] == rec[0]) continue;
+            else pass = false;
+        }
+        flag = pass;
+        if (pass) return rec[0].toStdString();
+        else
+        {
+            QMessageBox(QMessageBox::Icon::Information, "提示", "密码输入不一致", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            return std::string();
+        }
     }
 }
+
+std::string AccountAssistant::_getPassword(bool& flag, const bool& showMsgWhenReject)
+{
+    std::string password;
+    if (State::settings.passwordRequirement == "always" || (State::settings.passwordRequirement == "once" && State::needUserPassword))
+    {
+        password = _inputPassword(1, flag, showMsgWhenReject);
+        if (!flag || password.empty()) return "";
+    }
+    else if (State::settings.passwordRequirement == "once" && !State::needUserPassword) password = State::currentPassword;
+    else if (State::settings.passwordRequirement == "never" && State::needUserPassword)
+    {
+        password = AES::decryptString(
+            State::settings.userPassword,
+            AES::generateAESKey(
+                Define::KEY,
+                AES::hexStringToByteArray(Define::SALT),
+                Define::KEY_LENGTH,
+                Define::ITERATION_COUNT),
+            AES::hexStringToByteArray(Define::IV));
+    }
+    else password = State::currentPassword;
+    return password;
+}
+
 void AccountAssistant::slot_settingPageControl(void)
 {
     QPushButton* btn = qobject_cast<QPushButton*>(this->sender());
@@ -252,6 +334,20 @@ void AccountAssistant::slot_settingPageControl(void)
         _ui.pages->setCurrentWidget(_ui.page_main);
     }
 }
+void AccountAssistant::slot_currentPageChanged(int currentIndex)
+{
+    // 当前页面为设置页时依据全局设置更新页面组件状态
+    if (currentIndex = _ui.pages->indexOf(_ui.page_setting))
+    {
+        _ui.combo_windowCloseAction->setCurrentIndex(State::settings.windowCloseAction);
+        _ui.check_hideMainWindowWhenStart->setChecked(State::settings.hideMainWindowWhenStart);
+        _ui.check_showSystemMessageWhenStart->setChecked(State::settings.showSystemMessageWhenStart);
+        _ui.combo_clipboardWriteContent->setCurrentIndex(State::settings.clipboardWriteContent == "username" ? 0 : State::settings.clipboardWriteContent == "password" ? 1 : 2);
+        _ui.combo_clipboardWriteMode->setCurrentIndex(State::settings.clipboardWriteMode == "once" ? 0 : 1);
+        if (_ui.combo_clipboardWriteContent->currentIndex() != 2) _ui.combo_clipboardWriteMode->setEnabled(false);
+        _ui.btn_settingApply->setEnabled(false);
+    }
+}
 void AccountAssistant::slot_accountSearchRuleChanged(int currentIndex)
 {
     // 以账户类型为依据检索时显示类型下拉列表,隐藏输入框
@@ -275,24 +371,40 @@ void AccountAssistant::slot_accountSearchRuleChanged(int currentIndex)
 }
 void AccountAssistant::slot_newAccountArchive(void)
 {
-    // TODO: 完成新建对话框后实现该函数
-    _addLineToResultShowTable(0, AccountItem(std::format("Custom Name {}", _ui.table_resultShow->rowCount() + 1).c_str(), "0:1:2", "", "", "", "", "", "", "", "", "", ""));
+    bool ok;
+    std::string password = _inputPassword(2, ok, true);
+    if (ok)
+    {
+        if (password.empty())
+        {
+            QMessageBox(QMessageBox::Icon::Information, "提示", "空密码无效", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            return;
+        }
+        State::currentPassword = password;
+        Dialog_AccountArchiveEditor editor = Dialog_AccountArchiveEditor(this, State::currentDataCount);
+        connect(&editor, &Dialog_AccountArchiveEditor::signal_save, this, &AccountAssistant::slot_saveDataArchive);
+        editor.exec();
+    }
 }
 void AccountAssistant::slot_deleteAccountArchive(void)
 {
-    // TODO: 完成删除确认对话框后修改该函数
-    // 因为点击删除按钮时表格对应的行会被聚焦,所以点击时的聚焦行就是需要删除的行
-    //_ui.table_resultShow->removeRow(_ui.table_resultShow->currentRow());
-    QPushButton* btn = qobject_cast<QPushButton*>(this->sender());
-    if (btn == nullptr) return;
-    QTableWidget* table = _ui.table_resultShow;
-    QRect rect = btn->frameGeometry();
-    QModelIndex index = table->indexAt(QPoint(rect.x(), rect.y()));
-    table->removeRow(index.row());
+    int ret = QMessageBox::question(this, tr("请确认"), tr("是否删除此账户存档?"), QMessageBox::Yes | QMessageBox::No);
+    if (ret == QMessageBox::Yes) {
+        QPushButton* btn = qobject_cast<QPushButton*>(this->sender());
+        if (btn == nullptr) return;
+        QTableWidget* table = _ui.table_resultShow;
+        QRect rect = btn->frameGeometry();
+        QModelIndex index = table->indexAt(QPoint(rect.x(), rect.y()));
+        unsigned int id = std::stoi(table->item(index.row(), 8)->text().toStdString());
+        State::data.erase(id);
+        State::currentDataCount--;
+        table->removeRow(index.row());
+        // 写入文件
+        _writeDataToFile();
+    }
 }
 void AccountAssistant::slot_switchAccountVisability(void)
 {
-    // TODO: 查看账户密码时进行身份认证
     QToolButton* btn = qobject_cast<QToolButton*>(this->sender());
     if (btn == nullptr) return;
     QTableWidget* table = _ui.table_resultShow;
@@ -301,19 +413,61 @@ void AccountAssistant::slot_switchAccountVisability(void)
     QLineEdit* ledit_username = (QLineEdit*)(table->cellWidget(index.row(), 1));
     QLineEdit* ledit_password = (QLineEdit*)(table->cellWidget(index.row(), 2));
     QLineEdit::EchoMode echoMode = ledit_username->echoMode() == QLineEdit::Password ? QLineEdit::Normal : QLineEdit::Password;
-    ledit_username->setEchoMode(echoMode);
-    ledit_password->setEchoMode(echoMode);
-    QIcon icon;
+    unsigned int id = std::stoi(table->item(index.row(), 8)->text().toStdString());
+    std::string encystr = State::data[id];
+    std::vector<std::string> vec = Tools::split(encystr, "::");
+
     if (echoMode == QLineEdit::Normal)
     {
-        icon.addFile(QString::fromUtf8(":/icon/visibility_off.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn->setIcon(icon);
+        bool ok;
+        std::string password = _getPassword(ok);
+        if (password.empty())
+        {
+            if (ok) QMessageBox(QMessageBox::Icon::Information, "提示", "空密码无效", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            return;
+        }
+
+        std::string hashCode = vec[4];
+        std::string decystr;
+        bool pass = false;
+        try {
+            decystr = AES::decryptString(
+                vec[5],
+                AES::generateAESKey(
+                    password,
+                    AES::hexStringToByteArray(State::aesArgs.salt),
+                    State::aesArgs.keyLength,
+                    State::aesArgs.iterationCount),
+                AES::hexStringToByteArray(State::aesArgs.iv));
+
+            // 结果验证,对比该密码解密结果哈希值与原文哈希值是否吻合
+            std::string hashDecy = AES::getHashCode(decystr);
+            if (hashDecy == hashCode)
+            {
+                pass = true;
+                if (State::settings.passwordRequirement == "once") State::needUserPassword = false;
+            }
+            else pass = false;
+        }
+        catch (...) {}
+        // 如果密码错误则结束
+        if (!pass)
+        {
+            QMessageBox(QMessageBox::Icon::Information, "提示", "密码错误", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            return;
+        }
+
+        State::currentPassword = password;
+        vec = Tools::split(decystr, ":", 0, false);
     }
-    else
-    {
-        icon.addFile(QString::fromUtf8(":/icon/visibility.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        btn->setIcon(icon);
-    }
+
+    ledit_username->setEchoMode(echoMode);
+    ledit_username->setText(echoMode == QLineEdit::Normal ? QString(vec[1].c_str()) : "Username");
+    ledit_password->setEchoMode(echoMode);
+    ledit_password->setText(echoMode == QLineEdit::Normal ? QString(vec[2].c_str()) : "Password");
+    QIcon icon;
+    icon.addFile(QString::fromUtf8(echoMode == QLineEdit::Normal ? ":/icon/visibility_off.svg" : ":/icon/visibility.svg"), QSize(), QIcon::Normal, QIcon::Off);
+    btn->setIcon(icon);
 }
 void AccountAssistant::slot_copyAccount(void)
 {
@@ -324,18 +478,63 @@ void AccountAssistant::slot_copyAccount(void)
     QModelIndex index = table->indexAt(QPoint(rect.x(), rect.y()));
     QLineEdit* ledit_username = (QLineEdit*)(table->cellWidget(index.row(), 1));
     QLineEdit* ledit_password = (QLineEdit*)(table->cellWidget(index.row(), 2));
+    unsigned int id = std::stoi(table->item(index.row(), 8)->text().toStdString());
+    std::string encystr = State::data[id];
+    std::vector<std::string> vec = Tools::split(encystr, "::");
+
+    bool ok;
+    std::string password = _getPassword(ok);
+    if (password.empty())
+    {
+        if (ok) QMessageBox(QMessageBox::Icon::Information, "提示", "空密码无效", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+        return;
+    }
+
+    std::string hashCode = vec[4];
+    std::string decystr;
+    bool pass = false;
+    try {
+        decystr = AES::decryptString(
+            vec[5],
+            AES::generateAESKey(
+                password,
+                AES::hexStringToByteArray(State::aesArgs.salt),
+                State::aesArgs.keyLength,
+                State::aesArgs.iterationCount),
+            AES::hexStringToByteArray(State::aesArgs.iv));
+
+        // 结果验证,对比该密码解密结果哈希值与原文哈希值是否吻合
+        std::string hashDecy = AES::getHashCode(decystr);
+        if (hashDecy == hashCode)
+        {
+            pass = true;
+            if (State::settings.passwordRequirement == "once") State::needUserPassword = false;
+        }
+        else pass = false;
+    }
+    catch (...) {}
+    // 如果密码错误则结束
+    if (!pass)
+    {
+        QMessageBox(QMessageBox::Icon::Information, "提示", "密码错误", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+        return;
+    }
+
+    State::currentPassword = password;
+    vec = Tools::split(decystr, ":", 0, false);
+
     // 获取剪切板对象指针
     QClipboard* clipbord = QApplication::clipboard();
-    if (State::settings.clipboardWriteContent == "username") clipbord->setText(ledit_username->text());
-    else if (State::settings.clipboardWriteContent == "password") clipbord->setText(ledit_password->text());
+    if (State::settings.clipboardWriteContent == "username") clipbord->setText(QString(vec[1].c_str()));
+    else if (State::settings.clipboardWriteContent == "password") clipbord->setText(QString(vec[2].c_str()));
     else if (State::settings.clipboardWriteContent == "both")
     {
-        if (State::settings.clipboardWriteMode == "once") clipbord->setText(std::format("{0} {1}", ledit_username->text().toStdString(), ledit_password->text().toStdString()).c_str());
+        if (State::settings.clipboardWriteMode == "once") clipbord->setText(std::format("{0} {1}", vec[1], vec[2]).c_str());
         else if (State::settings.clipboardWriteMode == "listen")
         {
-            clipbord->setText(ledit_username->text());
+            clipbord->setText(QString(vec[1].c_str()));
             // 将密码保存到待写入变量,等待粘贴后将其写入剪切板
-            State::contentWaitToWriteClipboard = ledit_password->text().toStdString();
+            State::contentWaitToWriteClipboard = vec[2];
             // 设置粘贴快捷键监听标记
             State::listenPasteShortcuts = true;
             KeyHook::enableHook();
@@ -361,9 +560,11 @@ void AccountAssistant::slot_setSettingChangedFlag(void)
 }
 void AccountAssistant::slot_showAccountInfo(void)
 {
-    //std::string test = "comment:username:password:neko:0016:::This is test note message.\nEndline test.\n\nEmpty line test.";
+    // TODO: 删除测试语句
+    //std::string test = "000";
     //std::cout << AES::getHashCode(test) << std::endl;
-    //std::cout << AES::encryptString(test, AES::generateAESKey("000", AES::hexStringToByteArray(State::aesArgs.salt), State::aesArgs.keyLength, State::aesArgs.iterationCount), AES::hexStringToByteArray(State::aesArgs.iv)) << std::endl;
+    //std::cout << AES::encryptString(test, AES::generateAESKey(Define::KEY, AES::hexStringToByteArray(Define::SALT), Define::KEY_LENGTH, Define::ITERATION_COUNT), AES::hexStringToByteArray(Define::IV)) << std::endl;
+    //std::cout << AES::generateAESKey("000", AES::hexStringToByteArray(State::aesArgs.salt), State::aesArgs.keyLength, State::aesArgs.iterationCount) << std::endl;
 
     QPushButton* btn = qobject_cast<QPushButton*>(this->sender());
     if (btn == nullptr) return;
@@ -376,8 +577,12 @@ void AccountAssistant::slot_showAccountInfo(void)
     std::string hashCode = vec[4];
 
     bool ok;
-    std::string password = QInputDialog::getText(nullptr, "输入密码", "输入密码", QLineEdit::Password, "", &ok, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).toStdString();
-    if (!ok || password.empty()) return;
+    std::string password = _getPassword(ok);
+    if (password.empty())
+    {
+        if (ok) QMessageBox(QMessageBox::Icon::Information, "提示", "空密码无效", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+        return;
+    }
 
     bool pass = false;
     std::string decystr;
@@ -393,7 +598,11 @@ void AccountAssistant::slot_showAccountInfo(void)
 
         // 结果验证,对比该密码解密结果哈希值与原文哈希值是否吻合
         std::string hashDecy = AES::getHashCode(decystr);
-        if (hashDecy == hashCode) pass = true;
+        if (hashDecy == hashCode)
+        {
+            pass = true;
+            if (State::settings.passwordRequirement == "once") State::needUserPassword = false;
+        }
         else pass = false;
     }
     catch (...) {}
@@ -423,14 +632,13 @@ void AccountAssistant::slot_showAccountInfo(void)
     item.note = QString(vec[7].data());
 
     // 保存密码
-    State::aesArgs.password = password;
+    State::currentPassword = password;
 
     Dialog_AccountArchiveEditor editor = Dialog_AccountArchiveEditor(this, id, item);
     connect(&editor, &Dialog_AccountArchiveEditor::signal_save, this, &AccountAssistant::slot_saveDataArchive);
     editor.exec();
 }
-
-void AccountAssistant::slot_saveDataArchive(unsigned int id, AccountItem item)
+void AccountAssistant::slot_saveDataArchive(unsigned int id, AccountItem item, Dialog_AccountArchiveEditor::OpenMode mode)
 {
     std::string noEncy =
         (
@@ -455,9 +663,23 @@ void AccountAssistant::slot_saveDataArchive(unsigned int id, AccountItem item)
         AES::getHashCode(ency) + "::" +
         AES::encryptString(
             ency,
-            AES::generateAESKey(State::aesArgs.password, AES::hexStringToByteArray(State::aesArgs.salt), State::aesArgs.keyLength, State::aesArgs.iterationCount),
+            AES::generateAESKey(State::currentPassword, AES::hexStringToByteArray(State::aesArgs.salt), State::aesArgs.keyLength, State::aesArgs.iterationCount),
             AES::hexStringToByteArray(State::aesArgs.iv)
         );
+    // 更新内存
     State::data[id] = write;
-    std::cout << write << std::endl;
+    // 更新表格,根据模式判断是插入新行还是修改
+    if (mode == Dialog_AccountArchiveEditor::OpenMode::CREATE)
+    {
+        _addLineToResultShowTable(id, item);
+        State::currentDataCount++;
+    }
+    else
+    {
+        int row = _searchValueInTable(_ui.table_resultShow, 8, std::to_string(id));
+        _ui.table_resultShow->item(row, 0)->setText(item.customName);
+        _ui.table_resultShow->item(row, 5)->setText(item.type);
+    }
+    // 写入文件
+    _writeDataToFile();
 }

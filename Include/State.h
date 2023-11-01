@@ -3,11 +3,6 @@
 #include <string>
 #include <map>
 
-#define SETTING_FILE_NAME "settings.ini"
-#define AES_KEY_FILE_NAME "aesk.txt"
-#define DATA_FILE_NAME "data.txt"
-//#define DATA_FILE_NAME "archive.tdat"
-
 namespace Core
 {
     class State;
@@ -23,11 +18,15 @@ public:
 
     struct Settings
     {
+        // 功能设置
         int windowCloseAction;
         bool hideMainWindowWhenStart;
         bool showSystemMessageWhenStart;
         std::string clipboardWriteContent;
         std::string clipboardWriteMode;
+        // 安全设置
+        std::string passwordRequirement;
+        std::string userPassword;
     };
 
     struct AESArgs
@@ -36,7 +35,6 @@ public:
         int iterationCount;
         std::string salt;
         std::string iv;
-        std::string password;
     };
 
     // 存储软件全局设置
@@ -48,7 +46,9 @@ public:
 
     static bool listenPasteShortcuts;
     static std::string contentWaitToWriteClipboard;
+    static std::string currentPassword;
     static unsigned int currentDataCount;
+    static bool needUserPassword;
 
     /**
      * 从设置文件读取设置并更新全局设置参数

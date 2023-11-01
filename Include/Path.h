@@ -3,6 +3,10 @@
 #include <string>
 #include <map>
 
+#define SETTING_FILE_NAME "settings.ini"
+#define AES_KEY_FILE_NAME "aesk.txt"
+#define DATA_FILE_NAME "archive.tdat"
+
 namespace Core
 {
     class Path;
