@@ -15,6 +15,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -67,6 +68,8 @@ public:
     QScrollArea *scroll_settingOptionsContainer;
     QWidget *scrollAreaWidgetContents;
     QVBoxLayout *verticalLayout_4;
+    QGroupBox *groupBox_generalSetting;
+    QVBoxLayout *verticalLayout_5;
     QHBoxLayout *layout_settingPageOptions_1;
     QLabel *lb_windowCLoseAction;
     QComboBox *combo_windowCloseAction;
@@ -79,6 +82,17 @@ public:
     QComboBox *combo_clipboardWriteMode;
     QToolButton *tbtn_clipboardWriteHelp;
     QSpacerItem *horizontalSpacer_2;
+    QGroupBox *groupBox_securitySetting;
+    QVBoxLayout *verticalLayout_6;
+    QHBoxLayout *layout_settingPageOptions_3;
+    QLabel *lb_multiPasswordMode_tip;
+    QLabel *lb_multiPasswordMode_value;
+    QSpacerItem *horizontalSpacer_3;
+    QPushButton *pushButton;
+    QHBoxLayout *layout_settingPageOptions_4;
+    QLabel *lb_passwordRequirement;
+    QComboBox *combo_passwordRequirement;
+    QSpacerItem *horizontalSpacer_4;
     QSpacerItem *verticalSpacer;
     QHBoxLayout *layout_settingPageButtonBox;
     QSpacerItem *hs_1;
@@ -94,14 +108,14 @@ public:
     {
         if (AccountAssistantClass->objectName().isEmpty())
             AccountAssistantClass->setObjectName(QString::fromUtf8("AccountAssistantClass"));
-        AccountAssistantClass->resize(800, 500);
+        AccountAssistantClass->resize(880, 500);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(AccountAssistantClass->sizePolicy().hasHeightForWidth());
         AccountAssistantClass->setSizePolicy(sizePolicy);
-        AccountAssistantClass->setMinimumSize(QSize(800, 500));
-        AccountAssistantClass->setMaximumSize(QSize(800, 500));
+        AccountAssistantClass->setMinimumSize(QSize(880, 500));
+        AccountAssistantClass->setMaximumSize(QSize(880, 500));
         action_option_setting = new QAction(AccountAssistantClass);
         action_option_setting->setObjectName(QString::fromUtf8("action_option_setting"));
         QIcon icon;
@@ -280,16 +294,22 @@ public:
         scroll_settingOptionsContainer->setWidgetResizable(true);
         scrollAreaWidgetContents = new QWidget();
         scrollAreaWidgetContents->setObjectName(QString::fromUtf8("scrollAreaWidgetContents"));
-        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 444, 60));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 862, 428));
         verticalLayout_4 = new QVBoxLayout(scrollAreaWidgetContents);
         verticalLayout_4->setSpacing(6);
         verticalLayout_4->setContentsMargins(11, 11, 11, 11);
         verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
         verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        groupBox_generalSetting = new QGroupBox(scrollAreaWidgetContents);
+        groupBox_generalSetting->setObjectName(QString::fromUtf8("groupBox_generalSetting"));
+        verticalLayout_5 = new QVBoxLayout(groupBox_generalSetting);
+        verticalLayout_5->setSpacing(6);
+        verticalLayout_5->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
         layout_settingPageOptions_1 = new QHBoxLayout();
         layout_settingPageOptions_1->setSpacing(6);
         layout_settingPageOptions_1->setObjectName(QString::fromUtf8("layout_settingPageOptions_1"));
-        lb_windowCLoseAction = new QLabel(scrollAreaWidgetContents);
+        lb_windowCLoseAction = new QLabel(groupBox_generalSetting);
         lb_windowCLoseAction->setObjectName(QString::fromUtf8("lb_windowCLoseAction"));
         QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
@@ -299,7 +319,7 @@ public:
 
         layout_settingPageOptions_1->addWidget(lb_windowCLoseAction);
 
-        combo_windowCloseAction = new QComboBox(scrollAreaWidgetContents);
+        combo_windowCloseAction = new QComboBox(groupBox_generalSetting);
         combo_windowCloseAction->addItem(QString());
         combo_windowCloseAction->addItem(QString());
         combo_windowCloseAction->setObjectName(QString::fromUtf8("combo_windowCloseAction"));
@@ -308,30 +328,30 @@ public:
 
         layout_settingPageOptions_1->addWidget(combo_windowCloseAction);
 
-        check_hideMainWindowWhenStart = new QCheckBox(scrollAreaWidgetContents);
+        check_hideMainWindowWhenStart = new QCheckBox(groupBox_generalSetting);
         check_hideMainWindowWhenStart->setObjectName(QString::fromUtf8("check_hideMainWindowWhenStart"));
         check_hideMainWindowWhenStart->setLayoutDirection(Qt::RightToLeft);
 
         layout_settingPageOptions_1->addWidget(check_hideMainWindowWhenStart);
 
-        check_showSystemMessageWhenStart = new QCheckBox(scrollAreaWidgetContents);
+        check_showSystemMessageWhenStart = new QCheckBox(groupBox_generalSetting);
         check_showSystemMessageWhenStart->setObjectName(QString::fromUtf8("check_showSystemMessageWhenStart"));
         check_showSystemMessageWhenStart->setLayoutDirection(Qt::RightToLeft);
 
         layout_settingPageOptions_1->addWidget(check_showSystemMessageWhenStart);
 
 
-        verticalLayout_4->addLayout(layout_settingPageOptions_1);
+        verticalLayout_5->addLayout(layout_settingPageOptions_1);
 
         layout_settingPageOptions_2 = new QHBoxLayout();
         layout_settingPageOptions_2->setSpacing(6);
         layout_settingPageOptions_2->setObjectName(QString::fromUtf8("layout_settingPageOptions_2"));
-        lb_clipboardWriteContent = new QLabel(scrollAreaWidgetContents);
+        lb_clipboardWriteContent = new QLabel(groupBox_generalSetting);
         lb_clipboardWriteContent->setObjectName(QString::fromUtf8("lb_clipboardWriteContent"));
 
         layout_settingPageOptions_2->addWidget(lb_clipboardWriteContent);
 
-        combo_clipboardWriteContent = new QComboBox(scrollAreaWidgetContents);
+        combo_clipboardWriteContent = new QComboBox(groupBox_generalSetting);
         combo_clipboardWriteContent->addItem(QString());
         combo_clipboardWriteContent->addItem(QString());
         combo_clipboardWriteContent->addItem(QString());
@@ -339,19 +359,19 @@ public:
 
         layout_settingPageOptions_2->addWidget(combo_clipboardWriteContent);
 
-        lb_clipboardWriteMode = new QLabel(scrollAreaWidgetContents);
+        lb_clipboardWriteMode = new QLabel(groupBox_generalSetting);
         lb_clipboardWriteMode->setObjectName(QString::fromUtf8("lb_clipboardWriteMode"));
 
         layout_settingPageOptions_2->addWidget(lb_clipboardWriteMode);
 
-        combo_clipboardWriteMode = new QComboBox(scrollAreaWidgetContents);
+        combo_clipboardWriteMode = new QComboBox(groupBox_generalSetting);
         combo_clipboardWriteMode->addItem(QString());
         combo_clipboardWriteMode->addItem(QString());
         combo_clipboardWriteMode->setObjectName(QString::fromUtf8("combo_clipboardWriteMode"));
 
         layout_settingPageOptions_2->addWidget(combo_clipboardWriteMode);
 
-        tbtn_clipboardWriteHelp = new QToolButton(scrollAreaWidgetContents);
+        tbtn_clipboardWriteHelp = new QToolButton(groupBox_generalSetting);
         tbtn_clipboardWriteHelp->setObjectName(QString::fromUtf8("tbtn_clipboardWriteHelp"));
         tbtn_clipboardWriteHelp->setToolTipDuration(60000);
         QIcon icon9;
@@ -365,7 +385,66 @@ public:
         layout_settingPageOptions_2->addItem(horizontalSpacer_2);
 
 
-        verticalLayout_4->addLayout(layout_settingPageOptions_2);
+        verticalLayout_5->addLayout(layout_settingPageOptions_2);
+
+
+        verticalLayout_4->addWidget(groupBox_generalSetting);
+
+        groupBox_securitySetting = new QGroupBox(scrollAreaWidgetContents);
+        groupBox_securitySetting->setObjectName(QString::fromUtf8("groupBox_securitySetting"));
+        verticalLayout_6 = new QVBoxLayout(groupBox_securitySetting);
+        verticalLayout_6->setSpacing(6);
+        verticalLayout_6->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        layout_settingPageOptions_3 = new QHBoxLayout();
+        layout_settingPageOptions_3->setSpacing(6);
+        layout_settingPageOptions_3->setObjectName(QString::fromUtf8("layout_settingPageOptions_3"));
+        lb_multiPasswordMode_tip = new QLabel(groupBox_securitySetting);
+        lb_multiPasswordMode_tip->setObjectName(QString::fromUtf8("lb_multiPasswordMode_tip"));
+
+        layout_settingPageOptions_3->addWidget(lb_multiPasswordMode_tip);
+
+        lb_multiPasswordMode_value = new QLabel(groupBox_securitySetting);
+        lb_multiPasswordMode_value->setObjectName(QString::fromUtf8("lb_multiPasswordMode_value"));
+
+        layout_settingPageOptions_3->addWidget(lb_multiPasswordMode_value);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        layout_settingPageOptions_3->addItem(horizontalSpacer_3);
+
+        pushButton = new QPushButton(groupBox_securitySetting);
+        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+
+        layout_settingPageOptions_3->addWidget(pushButton);
+
+
+        verticalLayout_6->addLayout(layout_settingPageOptions_3);
+
+        layout_settingPageOptions_4 = new QHBoxLayout();
+        layout_settingPageOptions_4->setSpacing(6);
+        layout_settingPageOptions_4->setObjectName(QString::fromUtf8("layout_settingPageOptions_4"));
+        lb_passwordRequirement = new QLabel(groupBox_securitySetting);
+        lb_passwordRequirement->setObjectName(QString::fromUtf8("lb_passwordRequirement"));
+
+        layout_settingPageOptions_4->addWidget(lb_passwordRequirement);
+
+        combo_passwordRequirement = new QComboBox(groupBox_securitySetting);
+        combo_passwordRequirement->addItem(QString());
+        combo_passwordRequirement->addItem(QString());
+        combo_passwordRequirement->setObjectName(QString::fromUtf8("combo_passwordRequirement"));
+
+        layout_settingPageOptions_4->addWidget(combo_passwordRequirement);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        layout_settingPageOptions_4->addItem(horizontalSpacer_4);
+
+
+        verticalLayout_6->addLayout(layout_settingPageOptions_4);
+
+
+        verticalLayout_4->addWidget(groupBox_securitySetting);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -416,7 +495,7 @@ public:
         AccountAssistantClass->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(AccountAssistantClass);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 22));
+        menuBar->setGeometry(QRect(0, 0, 880, 22));
         menu_option = new QMenu(menuBar);
         menu_option->setObjectName(QString::fromUtf8("menu_option"));
         menu_file = new QMenu(menuBar);
@@ -438,7 +517,7 @@ public:
 
         retranslateUi(AccountAssistantClass);
 
-        pages->setCurrentIndex(0);
+        pages->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(AccountAssistantClass);
@@ -487,6 +566,7 @@ public:
         ___qtablewidgetitem7->setText(QCoreApplication::translate("AccountAssistantClass", "-", nullptr));
         QTableWidgetItem *___qtablewidgetitem8 = table_resultShow->horizontalHeaderItem(8);
         ___qtablewidgetitem8->setText(QCoreApplication::translate("AccountAssistantClass", "id", nullptr));
+        groupBox_generalSetting->setTitle(QCoreApplication::translate("AccountAssistantClass", "\344\270\200\350\210\254\350\256\276\347\275\256", nullptr));
         lb_windowCLoseAction->setText(QCoreApplication::translate("AccountAssistantClass", "\345\205\263\351\227\255\346\214\211\351\222\256\350\241\214\344\270\272", nullptr));
         combo_windowCloseAction->setItemText(0, QCoreApplication::translate("AccountAssistantClass", "\346\234\200\345\260\217\345\214\226", nullptr));
         combo_windowCloseAction->setItemText(1, QCoreApplication::translate("AccountAssistantClass", "\351\200\200\345\207\272\347\250\213\345\272\217", nullptr));
@@ -507,6 +587,19 @@ public:
                         "\346\235\277, \345\220\214\346\227\266\347\233\221\345\220\254&quot;Ctrl + V&quot;\345\277\253\346\215\267\351\224\256,</p><p>\345\275\223\346\214\211\344\270\213\346\255\244\345\277\253\346\215\267\351\224\256\345\220\216\350\207\252\345\212\250\345\260\206\345\257\206\347\240\201\345\206\231\345\205\245\345\211\252\345\210\207\346\235\277</p></body></html>", nullptr));
 #endif // QT_CONFIG(tooltip)
         tbtn_clipboardWriteHelp->setText(QCoreApplication::translate("AccountAssistantClass", "...", nullptr));
+        groupBox_securitySetting->setTitle(QCoreApplication::translate("AccountAssistantClass", "\345\256\211\345\205\250\350\256\276\347\275\256", nullptr));
+        lb_multiPasswordMode_tip->setText(QCoreApplication::translate("AccountAssistantClass", "\345\244\232\345\257\206\347\240\201\346\250\241\345\274\217: ", nullptr));
+        lb_multiPasswordMode_value->setText(QCoreApplication::translate("AccountAssistantClass", "\347\246\201\347\224\250", nullptr));
+#if QT_CONFIG(tooltip)
+        pushButton->setToolTip(QCoreApplication::translate("AccountAssistantClass", "<html><head/><body><p>\345\244\232\345\257\206\347\240\201\346\250\241\345\274\217:</p><p>\345\217\257\344\270\272\344\270\215\345\220\214\350\264\246\346\210\267\345\255\230\346\241\243\346\210\226\344\270\215\345\220\214\345\210\206\347\273\204\350\256\276\347\275\256\344\270\215\345\220\214\347\232\204\350\256\277\351\227\256\345\257\206\347\240\201\344\273\245\346\217\220\345\215\207\345\256\211\345\205\250\346\200\247</p><p>\345\274\200\345\220\257\345\220\216\347\232\204\345\275\261\345\223\215:</p><p>\342\221\240\350\256\276\347\275\256\351\241\271&lt;<span style=\" color:#ffaa00;\">\345\257\206\347\240\201\350\276\223\345\205\245\351\234\200\346\261\202</span>&gt;\345\260\206\350\242\253\351\224\201\345\256\232\344\270\272&quot;<span style=\" color:#ffaa00;\">\346\200\273\346\230\257</span>&quot;, \346\257\217\346\254\241\350\256\277\351\227\256\350\264\246\346\210\267\351\203\275\351\234\200\350\246\201\350\276\223\345\205\245\345\257\206\347\240\201</p><p>\342\221\241\345\274\200\345\220\257\345\220\216"
+                        "\350\213\245\350\246\201\351\207\215\346\226\260\347\246\201\347\224\250\345\244\232\345\257\206\347\240\201\346\250\241\345\274\217, \351\234\200\350\246\201\344\276\235\346\254\241\350\276\223\345\205\245<span style=\" color:#00aaff;\">\346\211\200\346\234\211</span>\350\264\246\346\210\267\345\255\230\346\241\243\346\210\226\345\210\206\347\273\204\345\275\223\345\211\215\350\256\276\347\275\256\347\232\204\350\256\277\351\227\256\345\257\206\347\240\201\344\273\245\351\252\214\350\257\201\350\272\253\344\273\275, \350\213\245\345\205\266\344\270\255\346\234\211<span style=\" color:#00aaff;\">\344\273\273\344\275\225\344\270\200\344\270\252</span>\345\257\206\347\240\201\350\242\253\345\277\230\350\256\260\345\210\231\346\227\240\346\263\225\347\246\201\347\224\250\345\244\232\345\257\206\347\240\201\346\250\241\345\274\217, \346\255\244\346\227\266\345\217\252\350\203\275\351\200\232\350\277\207\351\207\215\347\275\256\346\225\260\346\215\256\345\272\223\347\232\204\346\226\271\346\263\225\346\270\205\347\251"
+                        "\272\346\211\200\346\234\211\345\255\230\346\241\243\346\225\260\346\215\256\346\211\215\345\217\257\351\207\215\346\226\260\347\246\201\347\224\250</p></body></html>", nullptr));
+#endif // QT_CONFIG(tooltip)
+        pushButton->setText(QCoreApplication::translate("AccountAssistantClass", "\345\220\257\347\224\250\345\244\232\345\257\206\347\240\201\346\250\241\345\274\217", nullptr));
+        lb_passwordRequirement->setText(QCoreApplication::translate("AccountAssistantClass", "\345\257\206\347\240\201\350\276\223\345\205\245\351\234\200\346\261\202", nullptr));
+        combo_passwordRequirement->setItemText(0, QCoreApplication::translate("AccountAssistantClass", "\346\200\273\346\230\257", nullptr));
+        combo_passwordRequirement->setItemText(1, QCoreApplication::translate("AccountAssistantClass", "\345\220\257\345\212\250\345\220\216\351\246\226\346\254\241", nullptr));
+
         btn_settingReject->setText(QCoreApplication::translate("AccountAssistantClass", "\345\217\226\346\266\210", nullptr));
         btn_settingConfirm->setText(QCoreApplication::translate("AccountAssistantClass", "\347\241\256\350\256\244", nullptr));
         btn_settingApply->setText(QCoreApplication::translate("AccountAssistantClass", "\345\272\224\347\224\250", nullptr));

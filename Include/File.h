@@ -18,7 +18,7 @@ public:
      * \param path 文件路径
      * \param openMode 打开模式,默认为只读模式(ios::in)
      */
-    File(std::string path, std::ios_base::openmode openMode = std::ios::in);
+    File(const std::string& path, std::ios_base::openmode openMode = std::ios::in);
     ~File();
 
     /**
@@ -27,7 +27,7 @@ public:
      * \param path 文件路径
      * \param openMode 打开模式
      */
-    void update(std::string path, std::ios_base::openmode openMode = std::ios::in);
+    void update(const std::string& path, std::ios_base::openmode openMode = std::ios::in);
     /**
      * 关闭文件流对象
      *

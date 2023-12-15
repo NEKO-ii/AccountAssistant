@@ -11,6 +11,7 @@
 #include "Path.h"
 #include "Tools.h"
 #include "File.h"
+#include "Define.h"
 #include "EnDecryption.h"
 
 AccountAssistant::AccountAssistant(QWidget* parent)
@@ -129,7 +130,7 @@ void AccountAssistant::_initWidgetState(void)
     _ui.table_resultShow->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     _ui.table_resultShow->setColumnWidth(3, 30);
     _ui.table_resultShow->setColumnWidth(4, 30);
-    _ui.table_resultShow->setColumnWidth(5, 70);
+    _ui.table_resultShow->setColumnWidth(5, 150);
     _ui.table_resultShow->setColumnWidth(6, 60);
     _ui.table_resultShow->setColumnWidth(7, 60);
     _ui.table_resultShow->hideColumn(8);
@@ -145,6 +146,7 @@ void AccountAssistant::_initData(void)
         item.type = QString(vec[1].c_str());
         _addLineToResultShowTable(pair.first, item);
     }
+    this->_ui.lb_resultCount_value->setText(QString::number(State::currentDataCount));
 }
 
 void AccountAssistant::_connectSlots(void)
@@ -164,6 +166,7 @@ void AccountAssistant::_connectSlots(void)
     connect(_ui.check_showSystemMessageWhenStart, &QCheckBox::stateChanged, this, &AccountAssistant::slot_setSettingChangedFlag);
     connect(_ui.combo_clipboardWriteContent, &QComboBox::currentIndexChanged, this, &AccountAssistant::slot_setSettingChangedFlag);
     connect(_ui.combo_clipboardWriteMode, &QComboBox::currentIndexChanged, this, &AccountAssistant::slot_setSettingChangedFlag);
+    connect(_ui.combo_passwordRequirement, &QComboBox::currentIndexChanged, this, &AccountAssistant::slot_setSettingChangedFlag);
     // 当前页面变化时执行特定方法
     connect(_ui.pages, &QStackedWidget::currentChanged, this, &AccountAssistant::slot_currentPageChanged);
     // 检索依据变化时执行特定方法
@@ -179,6 +182,7 @@ void AccountAssistant::_applySettings(void)
         State::settings.showSystemMessageWhenStart = _ui.check_showSystemMessageWhenStart->isChecked();
         State::settings.clipboardWriteContent = _ui.combo_clipboardWriteContent->currentIndex() == 0 ? "username" : _ui.combo_clipboardWriteContent->currentIndex() == 1 ? "password" : "both";
         State::settings.clipboardWriteMode = _ui.combo_clipboardWriteMode->currentIndex() == 0 ? "once" : "listen";
+        State::settings.passwordRequirement = _ui.combo_passwordRequirement->currentIndex() == 0 ? "always" : "once";
         // 设置应用后使设置改变标记为false
         _isSettingChanged = false;
         _isSettingSaved = false;
@@ -205,7 +209,14 @@ void AccountAssistant::_addLineToResultShowTable(unsigned int id, const AccountI
     ledit_password->setStyleSheet("background:transparent; border:none; outline:none;");
     table->setCellWidget(currentRowIndex, 1, ledit_username);
     table->setCellWidget(currentRowIndex, 2, ledit_password);
-    table->setItem(currentRowIndex, 5, new QTableWidgetItem(accountItem.type));
+    QString tip;
+    for (auto i : accountItem.type.split(";"))
+    {
+        tip = tip.isEmpty() ? QString::fromStdString(Define::AccountTypeLabelTitle[Define::AccountType(i.toInt())]) : tip + ";" + QString::fromStdString(Define::AccountTypeLabelTitle[Define::AccountType(i.toInt())]);
+    }
+    QTableWidgetItem* type = new QTableWidgetItem(tip);
+    type->setToolTip(tip);
+    table->setItem(currentRowIndex, 5, type);
     QToolButton* tbtn_showAccount = new QToolButton(table);
     QToolButton* tbtn_copyAccount = new QToolButton(table);
     QPushButton* btn_accountInfo = new QPushButton(tr("详情"), table);
@@ -288,23 +299,13 @@ std::string AccountAssistant::_inputPassword(const int& inputCount, bool& flag, 
 std::string AccountAssistant::_getPassword(bool& flag, const bool& showMsgWhenReject)
 {
     std::string password;
-    if (State::settings.passwordRequirement == "always" || (State::settings.passwordRequirement == "once" && State::needUserPassword))
+    // TODO: 增加多密码设置项,在单密码模式下才可启用
+    if (State::settings.enableMultiPasswordMode || State::settings.passwordRequirement == "always" || (State::settings.passwordRequirement == "once" && State::needUserPassword))
     {
         password = _inputPassword(1, flag, showMsgWhenReject);
         if (!flag || password.empty()) return "";
     }
     else if (State::settings.passwordRequirement == "once" && !State::needUserPassword) password = State::currentPassword;
-    else if (State::settings.passwordRequirement == "never" && State::needUserPassword)
-    {
-        password = AES::decryptString(
-            State::settings.userPassword,
-            AES::generateAESKey(
-                Define::KEY,
-                AES::hexStringToByteArray(Define::SALT),
-                Define::KEY_LENGTH,
-                Define::ITERATION_COUNT),
-            AES::hexStringToByteArray(Define::IV));
-    }
     else password = State::currentPassword;
     return password;
 }
@@ -312,10 +313,11 @@ std::string AccountAssistant::_getPassword(bool& flag, const bool& showMsgWhenRe
 void AccountAssistant::slot_settingPageControl(void)
 {
     QPushButton* btn = qobject_cast<QPushButton*>(this->sender());
+    std::string objName = btn->objectName().toStdString();
     // 应用当前设置但不保存,页面保持现状
-    if (btn->objectName().toStdString() == "btn_settingApply") _applySettings();
+    if (objName == "btn_settingApply") _applySettings();
     // 应用并保存设置,返回主页面
-    else if (btn->objectName().toStdString() == "btn_settingConfirm")
+    else if (objName == "btn_settingConfirm")
     {
         // 如果设置改变,执行应用设置操作
         if (_isSettingChanged) _applySettings();
@@ -329,7 +331,7 @@ void AccountAssistant::slot_settingPageControl(void)
         _ui.pages->setCurrentWidget(_ui.page_main);
     }
     // 不改动设置,仅返回主页面
-    else if (btn->objectName().toStdString() == "btn_settingReject")
+    else if (objName == "btn_settingReject")
     {
         _ui.pages->setCurrentWidget(_ui.page_main);
     }
@@ -344,6 +346,8 @@ void AccountAssistant::slot_currentPageChanged(int currentIndex)
         _ui.check_showSystemMessageWhenStart->setChecked(State::settings.showSystemMessageWhenStart);
         _ui.combo_clipboardWriteContent->setCurrentIndex(State::settings.clipboardWriteContent == "username" ? 0 : State::settings.clipboardWriteContent == "password" ? 1 : 2);
         _ui.combo_clipboardWriteMode->setCurrentIndex(State::settings.clipboardWriteMode == "once" ? 0 : 1);
+        _ui.combo_passwordRequirement->setCurrentIndex(State::settings.passwordRequirement == "account" ? 0 : 1);
+        std::cout << State::settings.passwordRequirement << std::endl;
         if (_ui.combo_clipboardWriteContent->currentIndex() != 2) _ui.combo_clipboardWriteMode->setEnabled(false);
         _ui.btn_settingApply->setEnabled(false);
     }
@@ -424,6 +428,7 @@ void AccountAssistant::slot_switchAccountVisability(void)
         if (password.empty())
         {
             if (ok) QMessageBox(QMessageBox::Icon::Information, "提示", "空密码无效", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            State::needUserPassword = true;
             return;
         }
 
@@ -454,6 +459,7 @@ void AccountAssistant::slot_switchAccountVisability(void)
         if (!pass)
         {
             QMessageBox(QMessageBox::Icon::Information, "提示", "密码错误", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+            State::needUserPassword = true;
             return;
         }
 
@@ -581,6 +587,7 @@ void AccountAssistant::slot_showAccountInfo(void)
     if (password.empty())
     {
         if (ok) QMessageBox(QMessageBox::Icon::Information, "提示", "空密码无效", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+        State::needUserPassword = true;
         return;
     }
 
@@ -610,6 +617,7 @@ void AccountAssistant::slot_showAccountInfo(void)
     if (!pass)
     {
         QMessageBox(QMessageBox::Icon::Information, "提示", "密码错误", QMessageBox::Ok, nullptr, Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint).exec();
+        State::needUserPassword = true;
         return;
     }
 
@@ -678,7 +686,14 @@ void AccountAssistant::slot_saveDataArchive(unsigned int id, AccountItem item, D
     {
         int row = _searchValueInTable(_ui.table_resultShow, 8, std::to_string(id));
         _ui.table_resultShow->item(row, 0)->setText(item.customName);
-        _ui.table_resultShow->item(row, 5)->setText(item.type);
+        QString tip;
+        for (auto i : item.type.split(";"))
+        {
+            tip = tip.isEmpty() ? QString::fromStdString(Define::AccountTypeLabelTitle[Define::AccountType(i.toInt())]) : tip + ";" + QString::fromStdString(Define::AccountTypeLabelTitle[Define::AccountType(i.toInt())]);
+        }
+        QTableWidgetItem* item = _ui.table_resultShow->item(row, 5);
+        item->setText(tip);
+        item->setToolTip(tip);
     }
     // 写入文件
     _writeDataToFile();

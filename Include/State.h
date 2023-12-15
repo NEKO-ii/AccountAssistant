@@ -25,8 +25,9 @@ public:
         std::string clipboardWriteContent;
         std::string clipboardWriteMode;
         // 安全设置
+        bool enableMultiPasswordMode;
+        std::string multiPasswordMode;
         std::string passwordRequirement;
-        std::string userPassword;
     };
 
     struct AESArgs

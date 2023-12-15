@@ -2,9 +2,9 @@
 #include <string>
 #include "File.h"
 
-File::File(std::string path, std::ios_base::openmode openMode)
+File::File(const std::string& path, std::ios_base::openmode openMode)
+    : _path(path), _isOpen(false)
 {
-    _path = path;
     _fs.open(path, openMode);
     if (_fs.is_open())
     {
@@ -16,17 +16,16 @@ File::File(std::string path, std::ios_base::openmode openMode)
     }
     else
     {
-        _isOpen = false;
         std::cerr << std::format("Failed Open File: {}", path) << std::endl;
     }
 }
 
 File::~File()
 {
-    if (_fs.is_open())  _fs.close();
+    if (_fs.is_open()) _fs.close();
 }
 
-void File::update(std::string path, std::ios_base::openmode openMode)
+void File::update(const std::string& path, std::ios_base::openmode openMode)
 {
     _path = path;
     if (_fs.is_open())  _fs.close();

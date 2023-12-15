@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>880</width>
     <height>500</height>
    </rect>
   </property>
@@ -18,13 +18,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>800</width>
+    <width>880</width>
     <height>500</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>800</width>
+    <width>880</width>
     <height>500</height>
    </size>
   </property>
@@ -51,7 +51,7 @@
     <item>
      <widget class="QStackedWidget" name="pages">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_main">
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -265,8 +265,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>444</width>
-             <height>60</height>
+             <width>862</width>
+             <height>428</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -283,142 +283,239 @@
              <number>0</number>
             </property>
             <item>
-             <layout class="QHBoxLayout" name="layout_settingPageOptions_1">
-              <item>
-               <widget class="QLabel" name="lb_windowCLoseAction">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>关闭按钮行为</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="combo_windowCloseAction">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <item>
-                 <property name="text">
-                  <string>最小化</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>退出程序</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="check_hideMainWindowWhenStart">
-                <property name="layoutDirection">
-                 <enum>Qt::RightToLeft</enum>
-                </property>
-                <property name="text">
-                 <string>启动时隐藏主窗口</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="check_showSystemMessageWhenStart">
-                <property name="layoutDirection">
-                 <enum>Qt::RightToLeft</enum>
-                </property>
-                <property name="text">
-                 <string>启动时显示系统提示消息</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+             <widget class="QGroupBox" name="groupBox_generalSetting">
+              <property name="title">
+               <string>一般设置</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <layout class="QHBoxLayout" name="layout_settingPageOptions_1">
+                 <item>
+                  <widget class="QLabel" name="lb_windowCLoseAction">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>关闭按钮行为</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="combo_windowCloseAction">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <item>
+                    <property name="text">
+                     <string>最小化</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>退出程序</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="check_hideMainWindowWhenStart">
+                   <property name="layoutDirection">
+                    <enum>Qt::RightToLeft</enum>
+                   </property>
+                   <property name="text">
+                    <string>启动时隐藏主窗口</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="check_showSystemMessageWhenStart">
+                   <property name="layoutDirection">
+                    <enum>Qt::RightToLeft</enum>
+                   </property>
+                   <property name="text">
+                    <string>启动时显示系统提示消息</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layout_settingPageOptions_2">
+                 <item>
+                  <widget class="QLabel" name="lb_clipboardWriteContent">
+                   <property name="text">
+                    <string>复制账户时向剪切板内写入的内容</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="combo_clipboardWriteContent">
+                   <item>
+                    <property name="text">
+                     <string>用户名</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>密码</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>全部</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lb_clipboardWriteMode">
+                   <property name="text">
+                    <string>写入模式</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="combo_clipboardWriteMode">
+                   <item>
+                    <property name="text">
+                     <string>合并后写入</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>监听模式写入</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="tbtn_clipboardWriteHelp">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;当写入内容为全部时提供两种写入模式:&lt;/p&gt;&lt;p&gt;① 合并后写入:&lt;/p&gt;&lt;p&gt;该模式下复制账户时会将用户名与密码用空格连接后一次性写入剪切板&lt;/p&gt;&lt;p&gt;② 监听模式写入:&lt;/p&gt;&lt;p&gt;该模式下复制账户时会首先将用户名写入剪切板, 同时监听&amp;quot;Ctrl + V&amp;quot;快捷键,&lt;/p&gt;&lt;p&gt;当按下此快捷键后自动将密码写入剪切板&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="toolTipDuration">
+                    <number>60000</number>
+                   </property>
+                   <property name="text">
+                    <string>...</string>
+                   </property>
+                   <property name="icon">
+                    <iconset resource="resources/resources.qrc">
+                     <normaloff>:/icon/help.svg</normaloff>:/icon/help.svg</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_2">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="layout_settingPageOptions_2">
-              <item>
-               <widget class="QLabel" name="lb_clipboardWriteContent">
-                <property name="text">
-                 <string>复制账户时向剪切板内写入的内容</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="combo_clipboardWriteContent">
-                <item>
-                 <property name="text">
-                  <string>用户名</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>密码</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>全部</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="lb_clipboardWriteMode">
-                <property name="text">
-                 <string>写入模式</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="combo_clipboardWriteMode">
-                <item>
-                 <property name="text">
-                  <string>合并后写入</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>监听模式写入</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-              <item>
-               <widget class="QToolButton" name="tbtn_clipboardWriteHelp">
-                <property name="toolTip">
-                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;当写入内容为全部时提供两种写入模式:&lt;/p&gt;&lt;p&gt;① 合并后写入:&lt;/p&gt;&lt;p&gt;该模式下复制账户时会将用户名与密码用空格连接后一次性写入剪切板&lt;/p&gt;&lt;p&gt;② 监听模式写入:&lt;/p&gt;&lt;p&gt;该模式下复制账户时会首先将用户名写入剪切板, 同时监听&amp;quot;Ctrl + V&amp;quot;快捷键,&lt;/p&gt;&lt;p&gt;当按下此快捷键后自动将密码写入剪切板&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-                </property>
-                <property name="toolTipDuration">
-                 <number>60000</number>
-                </property>
-                <property name="text">
-                 <string>...</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="resources/resources.qrc">
-                  <normaloff>:/icon/help.svg</normaloff>:/icon/help.svg</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
-              </item>
-             </layout>
+             <widget class="QGroupBox" name="groupBox_securitySetting">
+              <property name="title">
+               <string>安全设置</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <layout class="QHBoxLayout" name="layout_settingPageOptions_3">
+                 <item>
+                  <widget class="QLabel" name="lb_multiPasswordMode_tip">
+                   <property name="text">
+                    <string>多密码模式: </string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lb_multiPasswordMode_value">
+                   <property name="text">
+                    <string>禁用</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_3">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="pushButton">
+                   <property name="toolTip">
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;多密码模式:&lt;/p&gt;&lt;p&gt;可为不同账户存档或不同分组设置不同的访问密码以提升安全性&lt;/p&gt;&lt;p&gt;开启后的影响:&lt;/p&gt;&lt;p&gt;①设置项&amp;lt;&lt;span style=&quot; color:#ffaa00;&quot;&gt;密码输入需求&lt;/span&gt;&amp;gt;将被锁定为&amp;quot;&lt;span style=&quot; color:#ffaa00;&quot;&gt;总是&lt;/span&gt;&amp;quot;, 每次访问账户都需要输入密码&lt;/p&gt;&lt;p&gt;②开启后若要重新禁用多密码模式, 需要依次输入&lt;span style=&quot; color:#00aaff;&quot;&gt;所有&lt;/span&gt;账户存档或分组当前设置的访问密码以验证身份, 若其中有&lt;span style=&quot; color:#00aaff;&quot;&gt;任何一个&lt;/span&gt;密码被忘记则无法禁用多密码模式, 此时只能通过重置数据库的方法清空所有存档数据才可重新禁用&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                   </property>
+                   <property name="text">
+                    <string>启用多密码模式</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item>
+                <layout class="QHBoxLayout" name="layout_settingPageOptions_4">
+                 <item>
+                  <widget class="QLabel" name="lb_passwordRequirement">
+                   <property name="text">
+                    <string>密码输入需求</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="combo_passwordRequirement">
+                   <item>
+                    <property name="text">
+                     <string>总是</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string>启动后首次</string>
+                    </property>
+                   </item>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="horizontalSpacer_4">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
             </item>
             <item>
              <spacer name="verticalSpacer">
@@ -498,7 +595,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>880</width>
      <height>22</height>
     </rect>
    </property>

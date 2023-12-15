@@ -34,8 +34,9 @@ void State::updateSettingsFromFile(void)
         else if (vec[0] == "clipboardWriteContent") settings.clipboardWriteContent = vec[1];
         else if (vec[0] == "clipboardWriteMode") settings.clipboardWriteMode = vec[1];
         // 安全设置读取
+        else if (vec[0] == "enableMultiPasswordMode") std::istringstream(vec[1]) >> std::boolalpha >> settings.enableMultiPasswordMode;
+        else if (vec[0] == "multiPasswordMode") settings.multiPasswordMode = vec[1];
         else if (vec[0] == "passwordRequirement") settings.passwordRequirement = vec[1];
-        else if (vec[0] == "userPassword") settings.userPassword = vec[1];
     }
 }
 
@@ -55,8 +56,9 @@ void State::writeSettingsToFile(void)
         else if (vec[0] == "clipboardWriteContent") vec[1] = settings.clipboardWriteContent;
         else if (vec[0] == "clipboardWriteMode") vec[1] = settings.clipboardWriteMode;
         // 以下为安全设置
+        else if (vec[0] == "enableMultiPasswordMode") vec[1] = settings.enableMultiPasswordMode ? "true" : "false";
+        else if (vec[0] == "multiPasswordMode") vec[1] = settings.multiPasswordMode;
         else if (vec[0] == "passwordRequirement") vec[1] = settings.passwordRequirement;
-        else if (vec[0] == "userPassword") vec[1] = settings.userPassword;
         line = std::format("{}={}", vec[0], vec[1]);
     }
     file.update(settingFilePath, std::ios::out);

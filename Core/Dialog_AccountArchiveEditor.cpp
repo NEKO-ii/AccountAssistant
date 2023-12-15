@@ -10,11 +10,9 @@
 #include <QPointer>
 
 Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id)
-    :QDialog(parent), _id(id)
+    :QDialog(parent), _id(id), _openMode(OpenMode::CREATE), _isDefaultTypeLabelRemoved(false)
 {
-    _openMode = OpenMode::CREATE;
     _item = AccountItem();
-    _isDefaultTypeLabelRemoved = false;
     _ui.setupUi(this);
     _initWidgetState();
     _initData();
@@ -22,11 +20,9 @@ Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsign
 }
 
 Dialog_AccountArchiveEditor::Dialog_AccountArchiveEditor(QWidget* parent, unsigned int id, const AccountItem& item)
-    :QDialog(parent), _id(id)
+    :QDialog(parent), _id(id), _openMode(OpenMode::UPDATE), _isDefaultTypeLabelRemoved(true)
 {
-    _openMode = OpenMode::UPDATE;
     _item = AccountItem(item);
-    _isDefaultTypeLabelRemoved = true;
     _ui.setupUi(this);
     _initWidgetState();
     _initData();
@@ -314,12 +310,15 @@ void Dialog_AccountArchiveEditor::_updateTypeControlBtn(void)
     // 通过禁用操作按钮,保证标签组数量在1~_ACCOUNT_TYPE_GROUP_LIMIT之间
     int index = _ui.combo_type->currentIndex();
     int size = _typeGroup.size();
+    bool isIndexExist = Tools::isInVector<int>(index, _typeGroup);
     if (!_isOnEditMode) _ui.btn_typeEdit->setEnabled(false);
-    else if ((size <= 1 && Tools::isInVector<int>(index, _typeGroup)) || (size >= _ACCOUNT_TYPE_GROUP_LIMIT && !Tools::isInVector<int>(index, _typeGroup))) _ui.btn_typeEdit->setEnabled(false);
+    else if ((size <= 1 && isIndexExist) || (size >= _ACCOUNT_TYPE_GROUP_LIMIT && !isIndexExist)) _ui.btn_typeEdit->setEnabled(false);
+    // 控制按钮锁定确保默认类型只能单独存在
+    else if (index == (int)Define::AccountType::DEFAULT && !isIndexExist) _ui.btn_typeEdit->setEnabled(false);
     else _ui.btn_typeEdit->setEnabled(true);
     // 修改按钮文本以及图标
     QIcon icon;
-    if (Tools::isInVector<int>(index, _typeGroup))
+    if (isIndexExist)
     {
         icon.addFile(QString::fromUtf8(":/icon/remove.svg"), QSize(), QIcon::Normal, QIcon::Off);
         _ui.btn_typeEdit->setIcon(icon);
