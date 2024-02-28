@@ -346,8 +346,7 @@ void AccountAssistant::slot_currentPageChanged(int currentIndex)
         _ui.check_showSystemMessageWhenStart->setChecked(State::settings.showSystemMessageWhenStart);
         _ui.combo_clipboardWriteContent->setCurrentIndex(State::settings.clipboardWriteContent == "username" ? 0 : State::settings.clipboardWriteContent == "password" ? 1 : 2);
         _ui.combo_clipboardWriteMode->setCurrentIndex(State::settings.clipboardWriteMode == "once" ? 0 : 1);
-        _ui.combo_passwordRequirement->setCurrentIndex(State::settings.passwordRequirement == "account" ? 0 : 1);
-        std::cout << State::settings.passwordRequirement << std::endl;
+        _ui.combo_passwordRequirement->setCurrentIndex(State::settings.passwordRequirement == "always" ? 0 : 1);
         if (_ui.combo_clipboardWriteContent->currentIndex() != 2) _ui.combo_clipboardWriteMode->setEnabled(false);
         _ui.btn_settingApply->setEnabled(false);
     }

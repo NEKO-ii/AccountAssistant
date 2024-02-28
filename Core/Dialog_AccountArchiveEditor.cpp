@@ -127,11 +127,7 @@ void Dialog_AccountArchiveEditor::_connect(void)
     // 关闭按钮
     connect(_ui.btn_reject, &QPushButton::clicked, this, &Dialog_AccountArchiveEditor::reject);
     // 保存按钮
-    connect(_ui.btn_save, &QPushButton::clicked, this, [this]
-        {
-            emit signal_save(_id, _item, _openMode);
-            accept();
-        });
+    connect(_ui.btn_save, &QPushButton::clicked, this, [this] {emit signal_save(_id, _item, _openMode); accept(); });
     // 检查按钮
     connect(_ui.btn_check, &QPushButton::clicked, this, &Dialog_AccountArchiveEditor::_check);
     // 显示账号密码按钮
